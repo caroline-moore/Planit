@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 extension NewEventInvitationsViewController
 {

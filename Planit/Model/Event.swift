@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class Event: NSObject
+class Event: NSObject, Codable
 {
     var name: String = ""
     var duration: TimeInterval = 0

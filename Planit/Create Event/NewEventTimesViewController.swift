@@ -90,29 +90,44 @@ class NewEventTimesViewController: UIViewController
                 }
             }
             
-//            for weekday in [DateComponents.Weekday.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
-//            {
-//                let calendar = Calendar(identifier: .gregorian)
-//
-//                let isAvailableAllDay = self.isAvailableAllDay[weekday] ?? false
-//                if isAvailableAllDay
-//                {
-//                    let collectionViewLayout = self.timesViewController.collectionViewLayout as! CalendarViewLayout
-//
-//                    var startComponents = calendar.dateComponents([.hour, .minute, .timeZone], from: collectionViewLayout.visibleDateInterval.start)
-//                    startComponents.weekdayOrdinal = 1
-//                    startComponents.gregorianWeekday = weekday
-//
-//                    var endComponents = calendar.dateComponents([.hour, .minute, .timeZone], from: collectionViewLayout.visibleDateInterval.end)
-//                    endComponents.weekdayOrdinal = 1
-//                    endComponents.gregorianWeekday = weekday
-//                    endComponents.hour = 23
-//                    endComponents.minute = 59
-//
-//                    let interval = DateInterval(start: calendar.date(from: startComponents)!, end: calendar.date(from: endComponents)!)
-//                    filteredIntervals.append(interval)
-//                }
-//            }
+            for weekday in [DateComponents.Weekday.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
+            {
+                let isEnabled: Bool
+                
+                switch weekday
+                {
+                case .sunday: isEnabled = self.sundayButton.isSelected
+                case .monday: isEnabled = self.mondayButton.isSelected
+                case .tuesday: isEnabled = self.tuesdayButton.isSelected
+                case .wednesday: isEnabled = self.wednesdayButton.isSelected
+                case .thursday: isEnabled = self.thursdayButton.isSelected
+                case .friday: isEnabled = self.fridayButton.isSelected
+                case .saturday: isEnabled = self.saturdayButton.isSelected
+                }
+                
+                guard isEnabled else { continue }
+                
+                let calendar = Calendar(identifier: .gregorian)
+
+                let isAvailableAllDay = self.isAvailableAllDay[weekday] ?? false
+                if isAvailableAllDay
+                {
+                    let collectionViewLayout = self.timesViewController.collectionViewLayout as! CalendarViewLayout
+
+                    var startComponents = calendar.dateComponents([.hour, .minute, .timeZone], from: collectionViewLayout.visibleDateInterval.start)
+                    startComponents.weekdayOrdinal = 1
+                    startComponents.gregorianWeekday = weekday
+
+                    var endComponents = calendar.dateComponents([.hour, .minute, .timeZone], from: collectionViewLayout.visibleDateInterval.end)
+                    endComponents.weekdayOrdinal = 1
+                    endComponents.gregorianWeekday = weekday
+                    endComponents.hour = 23
+                    endComponents.minute = 59
+
+                    let interval = DateInterval(start: calendar.date(from: startComponents)!, end: calendar.date(from: endComponents)!)
+                    filteredIntervals.append(interval)
+                }
+            }
             
             self.event.availabilityIntervals = Set(filteredIntervals as [NSDateInterval])
             invitationsViewController.event = self.event

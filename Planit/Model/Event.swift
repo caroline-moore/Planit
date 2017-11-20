@@ -14,5 +14,7 @@ class Event: NSObject
     var isRecurring: Bool = false
     var isPublic: Bool = false
     
+    var availabilityIntervals = Set<NSDateInterval>()
+    
     var invitedEmails = Set<String>()
 }

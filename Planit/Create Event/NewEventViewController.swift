@@ -29,13 +29,13 @@ extension NewEventViewController
 {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        guard let invitationsViewController = segue.destination as? NewEventInvitationsViewController else { return }
+        guard let timesViewController = segue.destination as? NewEventTimesViewController else { return }
         
         let event = Event()
         event.name = self.nameTextField.text ?? ""
         event.duration = self.durationPicker.countDownDuration
         event.isRecurring = self.isRecurringSwitch.isOn
-        invitationsViewController.event = event
+        timesViewController.event = event
     }
 }
 

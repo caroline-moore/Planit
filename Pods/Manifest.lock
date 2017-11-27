@@ -18,12 +18,14 @@ PODS:
   - FLKAutoLayout (0.2.1)
   - ORStackView (3.0.1):
     - FLKAutoLayout (~> 0.2)
+  - SwiftSocket (2.0.2)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.1.0)
   - Alamofire (~> 4.5.0)
   - ORStackView (~> 3.0)
+  - SwiftSocket
   - SwiftyJSON (~> 3.1.4)
 
 SPEC CHECKSUMS:
@@ -31,8 +33,9 @@ SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   FLKAutoLayout: 9db6b30c2008d230da608e62c607b11c23b942e6
   ORStackView: a1bb52748cd0ae29891c140baf22ff8972fb363c
+  SwiftSocket: 6f4c9c63fbc5c1d61188936bb3c599fd546f40ae
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 3cf22c3e06781410cab858cf9e77553e4c7244a1
+PODFILE CHECKSUM: e2776867816743328e2051ad4ccde9679bbd9279
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.2.1

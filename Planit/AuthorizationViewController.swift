@@ -92,7 +92,7 @@ private extension AuthorizationViewController
     
     func authorize()
     {
-        print("Authenticating user...")
+        var authorized = PlanitAPI.shared.login(usernameTextField.text!, password:passwordTextField.text!) { (success) in }
     }
 }
 

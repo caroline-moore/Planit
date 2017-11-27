@@ -51,6 +51,7 @@ class LaunchViewController: UIViewController
             "password": "secretpassword"
         ]
         
+        PlanitAPI.shared.connect()
         
         Alamofire.request("https://69.26.157.179:6789", method: .post, parameters: parameters2, encoding: JSONEncoding.default)
         /*

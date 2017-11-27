@@ -66,12 +66,18 @@ class PlanitAPI
         
         do
         {
-            serializedData = try JSONSerialization.data(withJSONObject: userData)
+            serializedData = try JSONEncoder().encode(userData)
         }
         catch let error
         {
             print(error)
         }
+        
+        var dataLength = UInt32(serializedData!.count)
+        dataLength = CFSwapInt32HostToBig(dataLength)
+        
+        var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
+        client.send(data: dataLengthData)
         
         switch client.send(data: serializedData!)
         {

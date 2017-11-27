@@ -655,7 +655,7 @@
                                 <rect key="frame" x="30" y="170" width="315" height="535"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="P7a-EU-nBI">
-                                        <rect key="frame" x="0.0" y="0.0" width="315" height="59.666666666666657"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="315" height="71.333333333333343"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Potential Days" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KOC-QP-ruV">
                                                 <rect key="frame" x="0.0" y="0.0" width="315" height="21.666666666666657"/>
@@ -664,10 +664,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Tok-Sb-wFx">
-                                                <rect key="frame" x="0.0" y="21.666666666666657" width="315" height="38"/>
+                                                <rect key="frame" x="0.0" y="21.666666666666657" width="315" height="49.666666666666686"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s3a-Nt-dV0">
-                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="0.0" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="S">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -680,7 +680,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPi-Y1-7kn">
-                                                        <rect key="frame" x="47.666666666666671" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="47.666666666666671" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="M">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -693,7 +693,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RrO-kM-IRq">
-                                                        <rect key="frame" x="95" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="95" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="T">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -706,7 +706,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBy-c7-OZ3">
-                                                        <rect key="frame" x="142.66666666666666" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="142.66666666666666" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="W">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -719,7 +719,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdj-dB-ay0">
-                                                        <rect key="frame" x="190" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="190" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="Th">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -732,7 +732,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YdY-ii-lLt">
-                                                        <rect key="frame" x="237.66666666666669" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="237.66666666666669" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="F">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -745,7 +745,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Mc-sn-l9R">
-                                                        <rect key="frame" x="285" y="0.0" width="30" height="38"/>
+                                                        <rect key="frame" x="285" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="Sa">
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -762,16 +762,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FOd-A2-OUL">
-                                        <rect key="frame" x="0.0" y="67.666666666666657" width="315" height="33.000000000000028"/>
+                                        <rect key="frame" x="0.0" y="79.333333333333343" width="315" height="32.999999999999972"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Potential times for" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CMq-OB-DPr">
-                                                <rect key="frame" x="0.0" y="5.6666666666666856" width="146.66666666666666" height="21.666666666666657"/>
+                                                <rect key="frame" x="0.0" y="5.6666666666666572" width="146.66666666666666" height="21.666666666666686"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yqm-uq-xKi">
-                                                <rect key="frame" x="151.66666666666663" y="0.0" width="163.33333333333337" height="33.000000000000028"/>
+                                                <rect key="frame" x="151.66666666666663" y="0.0" width="163.33333333333337" height="32.999999999999972"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="Monday ▾"/>
                                                 <connections>
@@ -781,7 +781,7 @@
                                         </subviews>
                                     </stackView>
                                     <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZ9-mQ-0HN">
-                                        <rect key="frame" x="0.0" y="104.66666666666669" width="315" height="150"/>
+                                        <rect key="frame" x="0.0" y="116.33333333333331" width="315" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="385-Xc-hzb"/>
                                         </constraints>
@@ -791,7 +791,7 @@
                                         </connections>
                                     </pickerView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qRF-t8-3bg">
-                                        <rect key="frame" x="0.0" y="108.66666666666669" width="315" height="60.666666666666629"/>
+                                        <rect key="frame" x="0.0" y="120.33333333333331" width="315" height="49"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjv-dc-AJn">
                                                 <rect key="frame" x="0.0" y="0.0" width="315" height="1"/>
@@ -801,16 +801,16 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="n8L-SA-61e">
-                                                <rect key="frame" x="0.0" y="9" width="315" height="42.666666666666629"/>
+                                                <rect key="frame" x="0.0" y="9" width="315" height="31"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All Day" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSt-Uj-Og2">
-                                                        <rect key="frame" x="0.0" y="10.666666666666629" width="256" height="21.666666666666686"/>
+                                                        <rect key="frame" x="0.0" y="4.6666666666666856" width="256" height="21.666666666666686"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ah-6F-brV">
-                                                        <rect key="frame" x="266" y="6" width="51" height="31"/>
+                                                        <rect key="frame" x="266" y="0.0" width="51" height="31"/>
                                                         <connections>
                                                             <action selector="pressedAllDayButton:" destination="2tT-By-g0e" eventType="valueChanged" id="XxX-kk-Vei"/>
                                                         </connections>
@@ -818,7 +818,7 @@
                                                 </subviews>
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W55-Bx-8k5">
-                                                <rect key="frame" x="0.0" y="59.666666666666629" width="315" height="1"/>
+                                                <rect key="frame" x="0.0" y="48" width="315" height="1"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="HFu-qR-FSe"/>

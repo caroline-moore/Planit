@@ -44,7 +44,16 @@ class PlanitAPI
         completion(true)
     }
     
-    func login(_ username: String, password: String, completion: (Bool) -> Void)
+    func signUp(_ email: String, username: String, password: String, completion: (Bool) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(false)
+            return
+        }
+    }
+    
+    func logIn(_ username: String, password: String, completion: (Bool) -> Void)
     {
         if (connected == false)
         {

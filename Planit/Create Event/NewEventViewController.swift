@@ -32,7 +32,7 @@ extension NewEventViewController
     {
         guard let timesViewController = segue.destination as? NewEventTimesViewController else { return }
         
-        let event = Event()
+        var event = Event()
         event.name = self.nameTextField.text ?? ""
         event.duration = self.durationPicker.countDownDuration
         event.isRecurring = self.isRecurringSwitch.isOn

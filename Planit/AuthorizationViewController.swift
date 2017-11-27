@@ -95,10 +95,28 @@ private extension AuthorizationViewController
         switch self.authorizationType
         {
         case .logIn:
-            PlanitAPI.shared.logIn(self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in }
+            PlanitAPI.shared.logIn(self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in
+                if success
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+            }
             
         case .signUp:
-            PlanitAPI.shared.signUp(self.emailTextField.text!, username:self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in }
+            PlanitAPI.shared.signUp(self.emailTextField.text!, username:self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in
+                if success
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+            }
         }
     }
 }

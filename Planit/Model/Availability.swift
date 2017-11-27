@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Availability: NSObject
+struct Availability
 {
     var user: User!
     var interval: DateInterval = DateInterval()

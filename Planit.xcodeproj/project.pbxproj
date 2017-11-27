@@ -11,6 +11,7 @@
 		18848C321FBD6F8E007806A1 /* Pods_Planit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 044B512535D5AB9C99B12890 /* Pods_Planit.framework */; };
 		18848C331FBD6F8E007806A1 /* Pods_Planit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 044B512535D5AB9C99B12890 /* Pods_Planit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		82941F071FCBD78E00270C87 /* PlanitAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82941F061FCBD78D00270C87 /* PlanitAPI.swift */; };
+		82941F0B1FCC22BD00270C87 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82941F0A1FCC22BD00270C87 /* JSON.swift */; };
 		BF0DFF731FBA7851001B7FCE /* CalendarViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0DFF721FBA7851001B7FCE /* CalendarViewLayout.swift */; };
 		BF2396C81FB035F2008DDF0D /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2396C71FB035F2008DDF0D /* Event.swift */; };
 		BF2396CC1FB03726008DDF0D /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2396CB1FB03726008DDF0D /* NewEventViewController.swift */; };
@@ -53,6 +54,7 @@
 		256D4962FD8D1801C724CA6E /* Pods-Planit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Planit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Planit/Pods-Planit.debug.xcconfig"; sourceTree = "<group>"; };
 		6B4973097D184ECBF77E4131 /* Pods-Planit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Planit.release.xcconfig"; path = "Pods/Target Support Files/Pods-Planit/Pods-Planit.release.xcconfig"; sourceTree = "<group>"; };
 		82941F061FCBD78D00270C87 /* PlanitAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanitAPI.swift; sourceTree = "<group>"; };
+		82941F0A1FCC22BD00270C87 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		BF0DFF721FBA7851001B7FCE /* CalendarViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewLayout.swift; sourceTree = "<group>"; };
 		BF2396C71FB035F2008DDF0D /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		BF2396CB1FB03726008DDF0D /* NewEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				BF2396C71FB035F2008DDF0D /* Event.swift */,
 				BFBDA0E21FC291F4000C802C /* User.swift */,
 				BFBDA0E01FC291E8000C802C /* Availability.swift */,
+				82941F0A1FCC22BD00270C87 /* JSON.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				BF2A55871FB946EE00AD4DEE /* NewEventTimesViewController.swift in Sources */,
 				BFBDA0E11FC291E9000C802C /* Availability.swift in Sources */,
 				BF2396CE1FB03738008DDF0D /* NewEventInvitationsViewController.swift in Sources */,
+				82941F0B1FCC22BD00270C87 /* JSON.swift in Sources */,
 				BFBDA0E31FC291F4000C802C /* User.swift in Sources */,
 				BFBDA0DD1FC26A14000C802C /* PanGestureRecognizer.swift in Sources */,
 				BFDE15591FAFC3DE00BE866B /* AuthorizationViewController.swift in Sources */,

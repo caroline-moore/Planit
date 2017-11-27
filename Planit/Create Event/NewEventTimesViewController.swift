@@ -129,7 +129,7 @@ class NewEventTimesViewController: UIViewController
                 }
             }
             
-            self.event.availabilityIntervals = Set(filteredIntervals as [NSDateInterval])
+            self.event.availabilityIntervals = filteredIntervals
             invitationsViewController.event = self.event
             
         default: break

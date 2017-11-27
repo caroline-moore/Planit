@@ -88,6 +88,21 @@ private extension NewEventInvitationsViewController
         self.event.isPublic = (self.publicPrivateSegmentedControl.selectedSegmentIndex == 1)
         self.event.invitedEmails = Set(self.invitedEmails)
         
+        do
+        {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            
+            let data = try encoder.encode(self.event)
+            
+            let string = String(data: data, encoding: .utf8)!
+            print(string)
+        }
+        catch
+        {
+            print(error)
+        }
+        
         print("Created Event:", self.event)
     }
     

@@ -8,11 +8,32 @@
 
 import Foundation
 
-struct JSON: Codable
+struct UserJSON: Codable
 {
     var type: String = ""
     var user: User? = nil
-    var event: Event? = nil
-    var eventID: Int?
+}
+
+struct UserIdJSON: Codable
+{
+    var type: String = ""
     var userID: Int?
+}
+
+struct EventJSON: Codable
+{
+    var type: String = ""
+    var event: Event? = nil
+}
+
+struct EventIdJSON: Codable
+{
+    var type: String = ""
+    var eventID: Int?
+}
+
+struct EventListJSON: Codable
+{
+    var type: String = ""
+    var eventList: Array<Event>?
 }

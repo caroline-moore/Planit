@@ -34,6 +34,179 @@ class PlanitAPI
     
     
     
+    func get(eventForID: Int, completion: (Event?) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(nil)
+            return
+        }
+        
+        var data = EventIdJSON()
+        data.type = "getevent"
+        data.eventID = eventForID
+        
+        do
+        {
+            let encoder = JSONEncoder()
+            let eventData = try encoder.encode(data)
+            
+            var dataLength = UInt32(eventData.count)
+            dataLength = CFSwapInt32HostToBig(dataLength)
+            
+            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
+            client.send(data: dataLengthData)
+            
+            switch client.send(data: eventData)
+            {
+            case .success:
+                guard let data = client.read(1024*10) else
+                {
+                    completion(nil)
+                    return
+                }
+                
+                let jsonData = Data(bytes: data)
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(EventJSON.self, from: jsonData)
+                
+                let event = json.event
+                
+                completion(event)
+                
+            case .failure(let error):
+                print(error)
+                completion(nil)
+            }
+        }
+        catch
+        {
+            print(error)
+        }
+    }
+    
+    
+    
+    func get(userForID: Int, completion: (User?) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(nil)
+            return
+        }
+        
+        var data = UserIdJSON()
+        data.type = "getuser"
+        data.userID = userForID
+        
+        do
+        {
+            let encoder = JSONEncoder()
+            let eventData = try encoder.encode(data)
+            
+            var dataLength = UInt32(eventData.count)
+            dataLength = CFSwapInt32HostToBig(dataLength)
+            
+            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
+            client.send(data: dataLengthData)
+            
+            switch client.send(data: eventData)
+            {
+            case .success:
+                guard let data = client.read(1024*10) else
+                {
+                    completion(nil)
+                    return
+                }
+                
+                let jsonData = Data(bytes: data)
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(UserJSON.self, from: jsonData)
+                
+                let user = json.user
+                
+                completion(user)
+            case .failure(let error):
+                print(error)
+                completion(nil)
+            }
+        }
+        catch
+        {
+            print(error)
+        }
+    }
+    
+    
+    
+    func getEvents(ofType: String, forUser: User, completion: (Array<Event>?) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(nil)
+            return
+        }
+        
+        var data = UserIdJSON()
+        data.userID = forUser.identifier
+        
+        switch ofType
+        {
+            case "created":
+                data.type = "getcreatedevents"
+            case "joined":
+                data.type = "getjoinedevents"
+            case "invited":
+                data.type = "getinvitedevents"
+            default:
+                completion(nil)
+                return
+        }
+        
+        do
+        {
+            let encoder = JSONEncoder()
+            let eventData = try encoder.encode(data)
+            
+            var dataLength = UInt32(eventData.count)
+            dataLength = CFSwapInt32HostToBig(dataLength)
+            
+            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
+            client.send(data: dataLengthData)
+            
+            switch client.send(data: eventData)
+            {
+            case .success:
+                guard let data = client.read(1024*10) else
+                {
+                    completion(nil)
+                    return
+                }
+                
+                let jsonData = Data(bytes: data)
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(EventListJSON.self, from: jsonData)
+                
+                let eventList = json.eventList
+                
+                completion(eventList)
+                
+            case .failure(let error):
+                print(error)
+                completion(nil)
+            }
+        }
+        catch
+        {
+            print(error)
+        }
+    }
+    
+    
+    
     func create(_ event: Event, completion: (Bool) -> Void)
     {
         if (connected == false)
@@ -44,8 +217,8 @@ class PlanitAPI
         
         do
         {
-            var data = JSON()
-            data.type = "event"
+            var data = EventJSON()
+            data.type = "createevent"
             data.event = event
             
             let encoder = JSONEncoder()
@@ -68,8 +241,6 @@ class PlanitAPI
                 
                 if let response = String(bytes: data, encoding: .utf8)
                 {
-                    print(response)
-                    
                     if (response == "true")
                     {
                         completion(true)
@@ -88,8 +259,6 @@ class PlanitAPI
         {
             print(error)
         }
-        
-        completion(true)
     }
     
     
@@ -125,25 +294,20 @@ class PlanitAPI
         case .success:
             guard let data = client.read(1024*10) else
             {
-                completion(false)
+                completion(nil)
                 return
             }
             
-            if let response = String(bytes: data, encoding: .utf8)
-            {
-                print(response)
-                
-                if (response == "true")
-                {
-                    print("signed up!")
-                    completion(true)
-                }
-                else
-                {
-                    print("not signed up :(")
-                    completion(false)
-                }
-            }
+            let jsonData = Data(bytes: data)
+            
+            let decoder = JSONDecoder()
+            let json = try decoder.decode(UserJSON.self, from: jsonData)
+            
+            let user = json.user
+            self.currentUser = user
+            
+            completion(true)
+            
         case .failure(let error):
             print(error)
             completion(false)
@@ -183,25 +347,20 @@ class PlanitAPI
             case .success:
                 guard let data = client.read(1024*10) else
                 {
-                    completion(false)
+                    completion(nil)
                     return
                 }
                 
-                if let response = String(bytes: data, encoding: .utf8)
-                {
-                    print(response)
-                    
-                    if (response == "true")
-                    {
-                        print("authenticated!")
-                        completion(true)
-                    }
-                    else
-                    {
-                        print("not authenticated :(")
-                        completion(false)
-                    }
-                }
+                let jsonData = Data(bytes: data)
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(UserJSON.self, from: jsonData)
+                
+                let user = json.user
+                self.currentUser = user
+                
+                completion(true)
+            
             case .failure(let error):
                 print(error)
                 completion(false)

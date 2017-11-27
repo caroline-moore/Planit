@@ -13,4 +13,6 @@ struct JSON: Codable
     var type: String = ""
     var user: User? = nil
     var event: Event? = nil
+    var eventID: Int?
+    var userID: Int?
 }

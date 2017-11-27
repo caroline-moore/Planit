@@ -53,7 +53,6 @@ class PlanitAPI
         }
         
         let userData = ["type": "login", "username": username, "password": password]
-        
         var serializedData : Data? = nil
         
         do

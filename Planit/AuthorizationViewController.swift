@@ -90,9 +90,16 @@ private extension AuthorizationViewController
         self.authorizeButton.isEnabled = enabled
     }
     
-    func authorize()
+    @IBAction func authorize()
     {
-        var authorized = PlanitAPI.shared.login(usernameTextField.text!, password:passwordTextField.text!) { (success) in }
+        switch self.authorizationType
+        {
+        case .logIn:
+            var authorized = PlanitAPI.shared.login(usernameTextField.text!, password:passwordTextField.text!) { (success) in }
+            
+        case .signUp:
+            
+        }
     }
 }
 

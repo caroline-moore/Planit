@@ -16,7 +16,7 @@ class PlanitAPI
     var connected : Bool
     var currentUser : User? = nil
     
-    private init()
+    init()
     {
         connected = false
     }
@@ -29,6 +29,16 @@ class PlanitAPI
             connected = true
         case .failure(let error):
             print(error)
+        }
+    }
+    
+    
+    
+    func listenForEventUpdates()
+    {
+        while (true)
+        {
+            
         }
     }
     
@@ -294,19 +304,26 @@ class PlanitAPI
         case .success:
             guard let data = client.read(1024*10) else
             {
-                completion(nil)
+                completion(false)
                 return
             }
             
-            let jsonData = Data(bytes: data)
-            
-            let decoder = JSONDecoder()
-            let json = try decoder.decode(UserJSON.self, from: jsonData)
-            
-            let user = json.user
-            self.currentUser = user
-            
-            completion(true)
+            do
+            {
+                let jsonData = Data(bytes: data)
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(UserJSON.self, from: jsonData)
+                
+                let user = json.user
+                self.currentUser = user
+                
+                completion(true)
+            }
+            catch let error
+            {
+                print(error)
+            }
             
         case .failure(let error):
             print(error)
@@ -347,19 +364,26 @@ class PlanitAPI
             case .success:
                 guard let data = client.read(1024*10) else
                 {
-                    completion(nil)
+                    completion(false)
                     return
                 }
                 
-                let jsonData = Data(bytes: data)
-                
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(UserJSON.self, from: jsonData)
-                
-                let user = json.user
-                self.currentUser = user
-                
-                completion(true)
+                do
+                {
+                    let jsonData = Data(bytes: data)
+                    
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(UserJSON.self, from: jsonData)
+                    
+                    let user = json.user
+                    self.currentUser = user
+                    
+                    completion(true)
+                }
+                catch let error
+                {
+                    print(error)
+                }
             
             case .failure(let error):
                 print(error)

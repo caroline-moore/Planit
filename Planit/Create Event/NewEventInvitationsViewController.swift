@@ -88,22 +88,37 @@ private extension NewEventInvitationsViewController
         self.event.isPublic = (self.publicPrivateSegmentedControl.selectedSegmentIndex == 1)
         self.event.invitedEmails = Set(self.invitedEmails)
         
-        do
-        {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            
-            let data = try encoder.encode(self.event)
-            
-            let string = String(data: data, encoding: .utf8)!
-            print(string)
-        }
-        catch
-        {
-            print(error)
-        }
+        var baseURL = "plan.it/"
+        baseURL.append(event.name.components(separatedBy: .whitespaces).joined())
+        self.event.URL = baseURL
         
-        print("Created Event:", self.event)
+        self.event.creator = PlanitAPI.shared.currentUser
+        
+//        do
+//        {
+//            let encoder = JSONEncoder()
+//            encoder.outputFormatting = .prettyPrinted
+//
+//            let data = try encoder.encode(self.event)
+//
+//            let string = String(data: data, encoding: .utf8)!
+//            print(string)
+//        }
+//        catch
+//        {
+//            print(error)
+//        }
+        
+        PlanitAPI.shared.create(event) { (success) in
+            if success
+            {
+                
+            }
+            else
+            {
+                
+            }
+        }
     }
     
     @IBAction func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer)

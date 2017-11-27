@@ -42,9 +42,6 @@ class PlanitAPI
             return
         }
         
-        var event = event
-        event.creator = self.currentUser
-        
         do
         {
             var data = JSON()

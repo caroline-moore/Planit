@@ -63,6 +63,8 @@ class PlanitAPI
     
     func receiveData() -> Data?
     {
+        Thread.sleep(forTimeInterval: 0.5)
+        
         guard let reversedDataLengthBytes = client.read(4) else { return nil }
         let dataLengthBytes = Array(reversedDataLengthBytes.reversed())
         
@@ -416,9 +418,8 @@ class PlanitAPI
                     do
                     {
                         let decoder = JSONDecoder()
-                        let json = try decoder.decode(UserJSON.self, from: jsonData)
+                        let user = try decoder.decode(User.self, from: jsonData)
                         
-                        let user = json.user
                         User.current = user
                         
                         completion(true)

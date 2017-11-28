@@ -10,36 +10,36 @@ import Foundation
 
 struct UserJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var user: User? = nil
 }
 
 struct UserIdJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var userID: Int?
 }
 
 struct EventJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var event: Event? = nil
 }
 
 struct EventIdJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var eventID: Int?
 }
 
 struct EventListJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var events: Array<Event>?
 }
 
 struct AvailabilityListJSON: Codable
 {
-    var type: String = ""
+    var type: String!
     var availabilities: Array<Availability>?
 }

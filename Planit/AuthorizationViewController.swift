@@ -113,15 +113,17 @@ private extension AuthorizationViewController
             
         case .signUp:
             PlanitAPI.shared.signUp(self.emailTextField.text!, username:self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in
-                if success
-                {
-                    self.fetchEvents()
-                }
-                else
-                {
-                    let alertController = UIAlertController(title: "Failed to Sign Up", message: "Please make sure you entered valid information and are connected to the internet, and try again.", preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    if success
+                    {
+                        self.fetchEvents()
+                    }
+                    else
+                    {
+                        let alertController = UIAlertController(title: "Failed to Sign Up", message: "Please make sure you entered valid information and are connected to the internet, and try again.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                    }
                 }
             }
         }

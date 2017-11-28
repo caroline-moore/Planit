@@ -20,7 +20,7 @@ class PlanitAPI
 {
     static let shared = PlanitAPI()
     
-    private var useDummyData = true
+    private var useDummyData = false
     
     let client = TCPClient(address: "172.20.10.3", port: 6789)
     var connected : Bool
@@ -76,6 +76,9 @@ class PlanitAPI
         }
         
         let data = Data(bytes: bytes)
+        
+        let temp = String(data: data, encoding: .utf8)!
+        print(temp)
         
         return data
     }
@@ -150,7 +153,7 @@ class PlanitAPI
         
         self.networkingQueue.async {
             
-            if self.useDummyData
+            if !self.useDummyData
             {
                 let (created, joined, invited) = self.generateEvents()
                 
@@ -357,9 +360,8 @@ class PlanitAPI
                     guard let jsonData = self.receiveData() else { completion(false); return }
                     
                     let decoder = JSONDecoder()
-                    let json = try decoder.decode(UserJSON.self, from: jsonData)
+                    let user = try decoder.decode(User.self, from: jsonData)
                     
-                    let user = json.user
                     User.current = user
                     
                     completion(true)

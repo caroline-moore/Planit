@@ -10,6 +10,8 @@ import Foundation
 
 struct User: Codable
 {
+    static var current: User?
+    
     var identifier: Int = 0
     var name: String = ""
     var email: String = ""

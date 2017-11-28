@@ -9,12 +9,17 @@
 import Foundation
 import SwiftSocket
 
+extension Notification.Name
+{
+    static let updatedEvent = Notification.Name("Updated event")
+}
+
+
 class PlanitAPI
 {
     static let shared = PlanitAPI()
-    let client = TCPClient(address: "127.0.0.1", port: 6789)
+    let client = TCPClient(address: "172.20.10.3", port: 6789)
     var connected : Bool
-    var currentUser : User? = nil
     
     init()
     {
@@ -34,11 +39,69 @@ class PlanitAPI
     
     
     
-    func listenForEventUpdates()
+    func receiveData() -> Data?
+    {
+        guard let reversedDataLengthBytes = client.read(4) else { return nil }
+        let dataLengthBytes = Array(reversedDataLengthBytes.reversed())
+        
+        let dataLength = UnsafePointer(dataLengthBytes).withMemoryRebound(to: UInt32.self, capacity: 1) {
+            return $0.pointee
+        }
+        
+        guard let bytes = client.read(Int(dataLength)) else
+        {
+            return nil
+        }
+        
+        let data = Data(bytes: bytes)
+        
+        return data
+    }
+    
+    
+    
+    func sendData<T: Codable>(data: T) throws -> Result
+    {
+        let encoder = JSONEncoder()
+        let eventData = try encoder.encode(data)
+        
+        var dataLength = UInt32(eventData.count)
+        dataLength = CFSwapInt32HostToBig(dataLength)
+        
+        let dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
+        let lengthResult = client.send(data: dataLengthData)
+        switch lengthResult
+        {
+        case .success:
+            let result = client.send(data: eventData)
+            return result
+            
+        case .failure:
+            return lengthResult
+        }
+    }
+    
+    
+    
+    func listenForUpdates(forEvent: Event)
     {
         while (true)
         {
-            
+            do
+            {
+                guard let jsonData = self.receiveData() else { continue }
+                
+                let decoder = JSONDecoder()
+                let json = try decoder.decode(EventJSON.self, from: jsonData)
+                
+                let updatedEvent = json.event
+                
+                NotificationCenter.default.post(name: .updatedEvent, object: updatedEvent)
+            }
+            catch
+            {
+                print(error)
+            }
         }
     }
     
@@ -58,25 +121,12 @@ class PlanitAPI
         
         do
         {
-            let encoder = JSONEncoder()
-            let eventData = try encoder.encode(data)
+            let result = try self.sendData(data: data)
             
-            var dataLength = UInt32(eventData.count)
-            dataLength = CFSwapInt32HostToBig(dataLength)
-            
-            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-            client.send(data: dataLengthData)
-            
-            switch client.send(data: eventData)
+            switch result
             {
             case .success:
-                guard let data = client.read(1024*10) else
-                {
-                    completion(nil)
-                    return
-                }
-                
-                let jsonData = Data(bytes: data)
+                guard let jsonData = self.receiveData() else { completion(nil); return }
                 
                 let decoder = JSONDecoder()
                 let json = try decoder.decode(EventJSON.self, from: jsonData)
@@ -112,25 +162,12 @@ class PlanitAPI
         
         do
         {
-            let encoder = JSONEncoder()
-            let eventData = try encoder.encode(data)
+            let result = try self.sendData(data: data)
             
-            var dataLength = UInt32(eventData.count)
-            dataLength = CFSwapInt32HostToBig(dataLength)
-            
-            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-            client.send(data: dataLengthData)
-            
-            switch client.send(data: eventData)
+            switch result
             {
             case .success:
-                guard let data = client.read(1024*10) else
-                {
-                    completion(nil)
-                    return
-                }
-                
-                let jsonData = Data(bytes: data)
+                guard let jsonData = self.receiveData() else { completion(nil); return }
                 
                 let decoder = JSONDecoder()
                 let json = try decoder.decode(UserJSON.self, from: jsonData)
@@ -177,30 +214,17 @@ class PlanitAPI
         
         do
         {
-            let encoder = JSONEncoder()
-            let eventData = try encoder.encode(data)
+            let result = try self.sendData(data: data)
             
-            var dataLength = UInt32(eventData.count)
-            dataLength = CFSwapInt32HostToBig(dataLength)
-            
-            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-            client.send(data: dataLengthData)
-            
-            switch client.send(data: eventData)
+            switch result
             {
             case .success:
-                guard let data = client.read(1024*10) else
-                {
-                    completion(nil)
-                    return
-                }
-                
-                let jsonData = Data(bytes: data)
+                guard let jsonData = self.receiveData() else { completion(nil); return }
                 
                 let decoder = JSONDecoder()
                 let json = try decoder.decode(EventListJSON.self, from: jsonData)
                 
-                let eventList = json.eventList
+                let eventList = json.events
                 
                 completion(eventList)
                 
@@ -231,25 +255,14 @@ class PlanitAPI
             data.type = "createevent"
             data.event = event
             
-            let encoder = JSONEncoder()
-            let eventData = try encoder.encode(data)
+            let result = try self.sendData(data: data)
             
-            var dataLength = UInt32(eventData.count)
-            dataLength = CFSwapInt32HostToBig(dataLength)
-            
-            var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-            client.send(data: dataLengthData)
-            
-            switch client.send(data: eventData)
+            switch result
             {
             case .success:
-                guard let data = client.read(1024*10) else
-                {
-                    completion(false)
-                    return
-                }
+                guard let data = self.receiveData() else { completion(false); return }
                 
-                if let response = String(bytes: data, encoding: .utf8)
+                if let response = String(data: data, encoding: .utf8)
                 {
                     if (response == "true")
                     {
@@ -282,52 +295,32 @@ class PlanitAPI
         }
         
         let userData = ["type": "signup", "email": email, "username": username, "password": password]
-        var serializedData : Data? = nil
         
         do
         {
-            serializedData = try JSONEncoder().encode(userData)
-        }
-        catch let error
-        {
-            print(error)
-        }
-        
-        var dataLength = UInt32(serializedData!.count)
-        dataLength = CFSwapInt32HostToBig(dataLength)
-        
-        var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-        client.send(data: dataLengthData)
-        
-        switch client.send(data: serializedData!)
-        {
-        case .success:
-            guard let data = client.read(1024*10) else
-            {
-                completion(false)
-                return
-            }
+            let result = try self.sendData(data: userData)
             
-            do
+            switch result
             {
-                let jsonData = Data(bytes: data)
-                
+            case .success:
+                guard let jsonData = self.receiveData() else { completion(false); return }
+
                 let decoder = JSONDecoder()
                 let json = try decoder.decode(UserJSON.self, from: jsonData)
                 
                 let user = json.user
-                self.currentUser = user
+                User.current = user
                 
                 completion(true)
-            }
-            catch let error
-            {
+                
+            case .failure(let error):
                 print(error)
+                completion(false)
             }
-            
-        case .failure(let error):
+        }
+        catch
+        {
             print(error)
-            completion(false)
         }
     }
     
@@ -342,52 +335,39 @@ class PlanitAPI
         }
         
         let userData = ["type": "login", "username": username, "password": password]
-        var serializedData : Data? = nil
         
         do
         {
-            serializedData = try JSONEncoder().encode(userData)
+            let result = try self.sendData(data: userData)
+        
+            switch result
+            {
+                case .success:
+                    guard let jsonData = self.receiveData() else { completion(false); return }
+                    
+                    do
+                    {
+                        let decoder = JSONDecoder()
+                        let json = try decoder.decode(UserJSON.self, from: jsonData)
+                        
+                        let user = json.user
+                        User.current = user
+                        
+                        completion(true)
+                    }
+                    catch let error
+                    {
+                        print(error)
+                    }
+                
+                case .failure(let error):
+                    print(error)
+                    completion(false)
+            }
         }
-        catch let error
+        catch
         {
             print(error)
-        }
-        
-        var dataLength = UInt32(serializedData!.count)
-        dataLength = CFSwapInt32HostToBig(dataLength)
-        
-        var dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
-        client.send(data: dataLengthData)
-        
-        switch client.send(data: serializedData!)
-        {
-            case .success:
-                guard let data = client.read(1024*10) else
-                {
-                    completion(false)
-                    return
-                }
-                
-                do
-                {
-                    let jsonData = Data(bytes: data)
-                    
-                    let decoder = JSONDecoder()
-                    let json = try decoder.decode(UserJSON.self, from: jsonData)
-                    
-                    let user = json.user
-                    self.currentUser = user
-                    
-                    completion(true)
-                }
-                catch let error
-                {
-                    print(error)
-                }
-            
-            case .failure(let error):
-                print(error)
-                completion(false)
         }
     }
 }

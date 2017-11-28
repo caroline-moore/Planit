@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Availability
+struct Availability: Codable
 {
     var user: User!
     var interval: DateInterval = DateInterval()

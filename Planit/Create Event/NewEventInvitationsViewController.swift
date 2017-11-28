@@ -92,7 +92,7 @@ private extension NewEventInvitationsViewController
         baseURL.append(event.name.components(separatedBy: .whitespaces).joined())
         self.event.URL = baseURL
         
-        self.event.creator = PlanitAPI.shared.currentUser
+        self.event.creator = User.current
         
 //        do
 //        {

@@ -35,5 +35,11 @@ struct EventIdJSON: Codable
 struct EventListJSON: Codable
 {
     var type: String = ""
-    var eventList: Array<Event>?
+    var events: Array<Event>?
+}
+
+struct AvailabilityListJSON: Codable
+{
+    var type: String = ""
+    var availabilities: Array<Availability>?
 }

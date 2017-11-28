@@ -21,6 +21,8 @@ class PlanitAPI
     let client = TCPClient(address: "172.20.10.3", port: 6789)
     var connected : Bool
     
+    private let networkingQueue = DispatchQueue(label: "com.carolinemoore.PlanitAPI.networkingQueue", attributes: [.concurrent])
+    
     init()
     {
         connected = false
@@ -28,16 +30,18 @@ class PlanitAPI
     
     func connect()
     {
-        switch client.connect(timeout: 10)
-        {
-        case .success:
-            connected = true
-        case .failure(let error):
-            print(error)
+        self.networkingQueue.async {
+            
+            switch self.client.connect(timeout: 10)
+            {
+            case .success:
+                self.connected = true
+            case .failure(let error):
+                print(error)
+            }
+            
         }
     }
-    
-    
     
     func receiveData() -> Data?
     {
@@ -107,7 +111,7 @@ class PlanitAPI
     
     
     
-    func get(eventForID: Int, completion: (Event?) -> Void)
+    func get(eventForID: Int, completion: @escaping (Event?) -> Void)
     {
         if (connected == false)
         {
@@ -115,40 +119,44 @@ class PlanitAPI
             return
         }
         
-        var data = EventIdJSON()
-        data.type = "getevent"
-        data.eventID = eventForID
-        
-        do
-        {
-            let result = try self.sendData(data: data)
+        self.networkingQueue.async {
             
-            switch result
+            var data = EventIdJSON()
+            data.type = "getevent"
+            data.eventID = eventForID
+            
+            do
             {
-            case .success:
-                guard let jsonData = self.receiveData() else { completion(nil); return }
+                let result = try self.sendData(data: data)
                 
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(EventJSON.self, from: jsonData)
-                
-                let event = json.event
-                
-                completion(event)
-                
-            case .failure(let error):
-                print(error)
-                completion(nil)
+                switch result
+                {
+                case .success:
+                    guard let jsonData = self.receiveData() else { completion(nil); return }
+                    
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(EventJSON.self, from: jsonData)
+                    
+                    let event = json.event
+                    
+                    completion(event)
+                    
+                case .failure(let error):
+                    print(error)
+                    completion(nil)
+                }
             }
-        }
-        catch
-        {
-            print(error)
+            catch
+            {
+                print(error)
+            }
+            
         }
     }
     
     
     
-    func get(userForID: Int, completion: (User?) -> Void)
+    func get(userForID: Int, completion: @escaping (User?) -> Void)
     {
         if (connected == false)
         {
@@ -156,39 +164,43 @@ class PlanitAPI
             return
         }
         
-        var data = UserIdJSON()
-        data.type = "getuser"
-        data.userID = userForID
-        
-        do
-        {
-            let result = try self.sendData(data: data)
+        self.networkingQueue.async {
             
-            switch result
+            var data = UserIdJSON()
+            data.type = "getuser"
+            data.userID = userForID
+            
+            do
             {
-            case .success:
-                guard let jsonData = self.receiveData() else { completion(nil); return }
+                let result = try self.sendData(data: data)
                 
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(UserJSON.self, from: jsonData)
-                
-                let user = json.user
-                
-                completion(user)
-            case .failure(let error):
-                print(error)
-                completion(nil)
+                switch result
+                {
+                case .success:
+                    guard let jsonData = self.receiveData() else { completion(nil); return }
+                    
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(UserJSON.self, from: jsonData)
+                    
+                    let user = json.user
+                    
+                    completion(user)
+                case .failure(let error):
+                    print(error)
+                    completion(nil)
+                }
             }
-        }
-        catch
-        {
-            print(error)
+            catch
+            {
+                print(error)
+            }
+            
         }
     }
     
     
     
-    func getEvents(ofType: String, forUser: User, completion: (Array<Event>?) -> Void)
+    func getEvents(ofType: String, forUser: User, completion: @escaping (Array<Event>?) -> Void)
     {
         if (connected == false)
         {
@@ -196,11 +208,13 @@ class PlanitAPI
             return
         }
         
-        var data = UserIdJSON()
-        data.userID = forUser.identifier
-        
-        switch ofType
-        {
+        self.networkingQueue.async {
+            
+            var data = UserIdJSON()
+            data.userID = forUser.identifier
+            
+            switch ofType
+            {
             case "created":
                 data.type = "getcreatedevents"
             case "joined":
@@ -210,123 +224,40 @@ class PlanitAPI
             default:
                 completion(nil)
                 return
-        }
-        
-        do
-        {
-            let result = try self.sendData(data: data)
-            
-            switch result
-            {
-            case .success:
-                guard let jsonData = self.receiveData() else { completion(nil); return }
-                
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(EventListJSON.self, from: jsonData)
-                
-                let eventList = json.events
-                
-                completion(eventList)
-                
-            case .failure(let error):
-                print(error)
-                completion(nil)
             }
-        }
-        catch
-        {
-            print(error)
-        }
-    }
-    
-    
-    
-    func create(_ event: Event, completion: (Bool) -> Void)
-    {
-        if (connected == false)
-        {
-            completion(false)
-            return
-        }
-        
-        do
-        {
-            var data = EventJSON()
-            data.type = "createevent"
-            data.event = event
             
-            let result = try self.sendData(data: data)
-            
-            switch result
+            do
             {
-            case .success:
-                guard let data = self.receiveData() else { completion(false); return }
+                let result = try self.sendData(data: data)
                 
-                if let response = String(data: data, encoding: .utf8)
+                switch result
                 {
-                    if (response == "true")
-                    {
-                        completion(true)
-                    }
-                    else
-                    {
-                        completion(false)
-                    }
+                case .success:
+                    guard let jsonData = self.receiveData() else { completion(nil); return }
+                    
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(EventListJSON.self, from: jsonData)
+                    
+                    let eventList = json.events
+                    
+                    completion(eventList)
+                    
+                case .failure(let error):
+                    print(error)
+                    completion(nil)
                 }
-            case .failure(let error):
-                print(error)
-                completion(false)
             }
-        }
-        catch
-        {
-            print(error)
-        }
-    }
-    
-    
-    
-    func signUp(_ email: String, username: String, password: String, completion: (Bool) -> Void)
-    {
-        if (connected == false)
-        {
-            completion(false)
-            return
-        }
-        
-        let userData = ["type": "signup", "email": email, "username": username, "password": password]
-        
-        do
-        {
-            let result = try self.sendData(data: userData)
+            catch
+            {
+                print(error)
+            }
             
-            switch result
-            {
-            case .success:
-                guard let jsonData = self.receiveData() else { completion(false); return }
-
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(UserJSON.self, from: jsonData)
-                
-                let user = json.user
-                User.current = user
-                
-                completion(true)
-                
-            case .failure(let error):
-                print(error)
-                completion(false)
-            }
-        }
-        catch
-        {
-            print(error)
         }
     }
     
     
     
-    func logIn(_ username: String, password: String, completion: (Bool) -> Void)
+    func create(_ event: Event, completion: @escaping (Bool) -> Void)
     {
         if (connected == false)
         {
@@ -334,14 +265,107 @@ class PlanitAPI
             return
         }
         
-        let userData = ["type": "login", "username": username, "password": password]
-        
-        do
-        {
-            let result = try self.sendData(data: userData)
-        
-            switch result
+        self.networkingQueue.async {
+            do
             {
+                var data = EventJSON()
+                data.type = "createevent"
+                data.event = event
+                
+                let result = try self.sendData(data: data)
+                
+                switch result
+                {
+                case .success:
+                    guard let data = self.receiveData() else { completion(false); return }
+                    
+                    if let response = String(data: data, encoding: .utf8)
+                    {
+                        if (response == "true")
+                        {
+                            completion(true)
+                        }
+                        else
+                        {
+                            completion(false)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    completion(false)
+                }
+            }
+            catch
+            {
+                print(error)
+            }
+        }
+    }
+    
+    
+    
+    func signUp(_ email: String, username: String, password: String, completion: @escaping (Bool) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(false)
+            return
+        }
+        
+        self.networkingQueue.async {
+            
+            let userData = ["type": "signup", "email": email, "username": username, "password": password]
+            
+            do
+            {
+                let result = try self.sendData(data: userData)
+                
+                switch result
+                {
+                case .success:
+                    guard let jsonData = self.receiveData() else { completion(false); return }
+                    
+                    let decoder = JSONDecoder()
+                    let json = try decoder.decode(UserJSON.self, from: jsonData)
+                    
+                    let user = json.user
+                    User.current = user
+                    
+                    completion(true)
+                    
+                case .failure(let error):
+                    print(error)
+                    completion(false)
+                }
+            }
+            catch
+            {
+                print(error)
+            }
+            
+        }
+    }
+    
+    
+    
+    func logIn(_ username: String, password: String, completion: @escaping (Bool) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(false)
+            return
+        }
+        
+        self.networkingQueue.async {
+            
+            let userData = ["type": "login", "username": username, "password": password]
+            
+            do
+            {
+                let result = try self.sendData(data: userData)
+                
+                switch result
+                {
                 case .success:
                     guard let jsonData = self.receiveData() else { completion(false); return }
                     
@@ -359,15 +383,17 @@ class PlanitAPI
                     {
                         print(error)
                     }
-                
+                    
                 case .failure(let error):
                     print(error)
                     completion(false)
+                }
             }
-        }
-        catch
-        {
-            print(error)
+            catch
+            {
+                print(error)
+            }
+            
         }
     }
 }

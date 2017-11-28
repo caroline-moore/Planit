@@ -296,6 +296,7 @@ class PlanitAPI
                 var data = EventJSON()
                 data.type = "updateevent"
                 data.event = event
+                data.user = User.current
                 
                 let result = try self.sendData(data: data)
                 

@@ -24,6 +24,7 @@ struct EventJSON: Codable
 {
     var type: String!
     var event: Event? = nil
+    var user: User?
 }
 
 struct EventIdJSON: Codable

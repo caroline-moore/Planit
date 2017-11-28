@@ -13,6 +13,11 @@ struct User: Codable
     static var current: User?
     static let temporary = User(name: "Me", email: "me@me.com", id: 1064)
     
+    static let caroline = User(name: "Caroline", email: "carolimm@usc.edu", id: 103)
+    static let tyler = User(name: "Tyler", email: "tacklee@usc.edu", id: 109)
+    static let alex = User(name: "Alex", email: "alex@usc.edu", id: 201)
+    static let gordon = User(name: "Gordon", email: "gordon@usc.edu", id: 270)
+    
     var identifier: Int = 0
     var name: String = ""
     var email: String = ""

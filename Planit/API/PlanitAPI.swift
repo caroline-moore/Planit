@@ -53,8 +53,10 @@ class PlanitAPI
             switch self?.client.connect(timeout: 10) ?? .success
             {
             case .success:
+                print("Successfully connected!")
                 self?.connected = true
             case .failure(let error):
+                print("Failed to connect :(")
                 print(error)
             }
             
@@ -180,7 +182,7 @@ class PlanitAPI
             
             if self.useDummyData
             {
-                let events = self.generateEvents()
+                let events = self.generateCarolineEvents()
                 completion(events)
                 
                 return
@@ -395,7 +397,7 @@ class PlanitAPI
             if self.useDummyData
             {
                 let user = self.generateUser()
-                User.current = user
+                User.current = User.caroline
                 
                 completion(true)
                 
@@ -449,7 +451,81 @@ private extension PlanitAPI
         return user
     }
     
-    func generateEvents() -> ([Event], [Event], [Event])
+    func generateCarolineEvents() -> ([Event], [Event], [Event])
+    {
+        let users = ["Tyler", "Alex", "Gordon", "Caroline", "Maddie"].map { (name) -> User in
+            let user = User(name: name, email: "email", id: 0)
+            return user
+        }
+        
+        var event1 = Event(name: "270 Study Group", creator: User.caroline, isPublic: true, invitedEmails: [], joinedUsers: [User.caroline, users[0]])
+        event1.availabilities = {
+            
+            func availability(for tuple: (Calendar.Weekday, Int, Int), user: User) -> Availability
+            {
+                let dateComponents = DateComponents(hour: tuple.1, weekday: tuple.0.rawValue, weekdayOrdinal: 1)
+                
+                let date = Calendar.current.date(from: dateComponents)!
+                
+                let interval = DateInterval(start: date, duration: TimeInterval((tuple.2 - tuple.1) * 60 * 60))
+                
+                let availability = Availability(user: user, interval: interval)
+                return availability
+            }
+            
+            let carolineAvailabilities = [(Calendar.Weekday.monday, 8, 12), (.monday, 16, 18), (.monday, 21, 23),
+                                          (.tuesday, 8, 11), (.tuesday, 13, 14), (.tuesday, 16, 19)].map { return availability(for: $0, user: .caroline) }
+            
+            let tylerAvailabilities = [(Calendar.Weekday.monday, 8, 15), (.monday, 17, 23),
+                                       (.tuesday, 8, 11), (.tuesday, 13, 15), (.tuesday, 17, 18), (.tuesday, 20, 23)].map { return availability(for: $0, user: .tyler) }
+            
+            let alexAvailabilities = [(Calendar.Weekday.monday, 10, 12), (.monday, 13, 15), (.monday, 17, 19), (.monday, 21, 23),
+                                      (.tuesday, 8, 11), (.tuesday, 14, 16), (.tuesday, 17, 18), (.tuesday, 20, 23)].map { return availability(for: $0, user: .alex) }
+            
+            let gordonAvailabilities = [(Calendar.Weekday.monday, 8, 11), (.monday, 13, 18),
+                                      (.tuesday, 8, 11), (.tuesday, 15, 23)].map { return availability(for: $0, user: .gordon) }
+            
+            let availabilities = carolineAvailabilities + tylerAvailabilities + alexAvailabilities + gordonAvailabilities
+            return Set(availabilities)
+        }()
+        event1.availabilityIntervals = {
+            
+            var intervals = [DateInterval]()
+            
+            for weekday in Calendar.Weekday.allValues[1..<Calendar.Weekday.allValues.count - 1]
+            {
+                let date = DateComponents(calendar: Calendar.current, hour: 10, weekday: weekday.rawValue, weekdayOrdinal: 1).date!
+                
+                let interval = DateInterval(start: date, duration: 3600)
+                intervals.append(interval)
+            }
+            
+            return intervals
+        }()
+        
+        let event2 = Event(name: "ITP-342 Project", creator: User.caroline, isPublic: false, invitedEmails: ["1", "2", "3"], joinedUsers: [users[1], users[2]])
+        let event3 = Event(name: "Accounting Project", creator: User.caroline, isPublic: false, invitedEmails: ["1", "2", "3", "5", "6", "7"], joinedUsers: [users[3], users[4], users[0], users[1], users[2]])
+        let event4 = Event(name: "Thanksgiving Dinner", creator: User.caroline, isPublic: true, invitedEmails: [], joinedUsers: [users[0], users[1]])
+        let event5 = Event(name: "Weekend Retreat", creator: User.caroline, isPublic: true, invitedEmails: [], joinedUsers: [users[0]])
+        
+        let event6 = Event(name: "Birthday Party", creator: User.tyler, isPublic: false, invitedEmails: ["carolimm@usc.edu"], joinedUsers: [users[0]])
+        
+        let event7 = Event(name: "Movie Night", creator: User.tyler, isPublic: true, invitedEmails: ["carolimm@usc.edu"], joinedUsers: [User.caroline])
+        
+        var event201 = Event(name: "CSCI 201 Project", creator: User.caroline, isPublic: true, invitedEmails: ["carolimm@usc.edu"], joinedUsers: [User.caroline])
+        event201.availabilityIntervals = event1.availabilityIntervals
+        
+        if User.current == User.caroline
+        {
+            return ([event1, event2, event3, event4, event5], [event7], [event6])
+        }
+        else
+        {
+            return ([event6, event7], [event1], [event4, event2, event201])
+        }
+    }
+    
+    /*func generateEvents() -> ([Event], [Event], [Event])
     {
         let users = ["Tyler", "Alex", "Gordon", "Yuchuan", "Will"].map { (name) -> User in
             let user = User(name: name, email: "email", id: 0)
@@ -547,5 +623,5 @@ private extension PlanitAPI
         }
         
         fatalError()
-    }
+    }*/
 }

@@ -8,58 +8,6 @@
 
 import UIKit
 
-extension DateComponents
-{
-    enum Weekday: Int
-    {
-        case sunday = 1
-        case monday
-        case tuesday
-        case wednesday
-        case thursday
-        case friday
-        case saturday
-        
-        var localizedName: String {
-            switch self
-            {
-            case .sunday: return NSLocalizedString("Sunday", comment: "")
-            case .monday: return NSLocalizedString("Monday", comment: "")
-            case .tuesday: return NSLocalizedString("Tuesday", comment: "")
-            case .wednesday: return NSLocalizedString("Wednesday", comment: "")
-            case .thursday: return NSLocalizedString("Thursday", comment: "")
-            case .friday: return NSLocalizedString("Friday", comment: "")
-            case .saturday: return NSLocalizedString("Saturday", comment: "")
-            }
-        }
-        
-        var localizedAbbreviation: String {
-            switch self
-            {
-            case .sunday: return NSLocalizedString("S", comment: "")
-            case .monday: return NSLocalizedString("M", comment: "")
-            case .tuesday: return NSLocalizedString("T", comment: "")
-            case .wednesday: return NSLocalizedString("W", comment: "")
-            case .thursday: return NSLocalizedString("Th", comment: "")
-            case .friday: return NSLocalizedString("F", comment: "")
-            case .saturday: return NSLocalizedString("Sa", comment: "")
-            }
-        }
-    }
-    
-    var gregorianWeekday: Weekday? {
-        get {
-            guard let day = self.weekday else { return nil }
-            
-            let weekday = Weekday(rawValue: day)
-            return weekday
-        }
-        set {
-            self.weekday = newValue?.rawValue
-        }
-    }
-}
-
 class CalendarViewTimeLayoutAttributes: UICollectionViewLayoutAttributes
 {
     var text = ""
@@ -68,7 +16,7 @@ class CalendarViewTimeLayoutAttributes: UICollectionViewLayoutAttributes
 
 protocol CalendarViewLayoutDataSource: class
 {
-    func calendarViewLayout(_ calendarViewLayout: CalendarViewLayout, dateIntervalForItemAt indexPath: IndexPath) -> DateInterval
+    func calendarViewLayout(_ calendarViewLayout: CalendarViewLayout, availabilityForItemAt indexPath: IndexPath) -> Availability
 }
 
 class CalendarViewLayout: UICollectionViewLayout
@@ -76,7 +24,7 @@ class CalendarViewLayout: UICollectionViewLayout
     weak var dataSource: CalendarViewLayoutDataSource?
     
     var visibleDateInterval: DateInterval!
-    var visibleWeekday: DateComponents.Weekday = .sunday
+    var visibleWeekday: Calendar.Weekday = .sunday
     
     var timeColumnWidth: CGFloat = 44
     
@@ -88,6 +36,24 @@ class CalendarViewLayout: UICollectionViewLayout
     
     private var contentWidth: CGFloat {
         return self.collectionViewContentSize.width - self.timeColumnWidth
+    }
+    
+    private var availabilities: [Availability] {
+        guard let collectionView = self.collectionView, let collectionViewDataSource = self.collectionView?.dataSource, let dataSource = self.dataSource else { return [] }
+        
+        let itemCount = collectionViewDataSource.collectionView(collectionView, numberOfItemsInSection: 0)
+        
+        var availabilities = [Availability]()
+        
+        for i in 0 ..< itemCount
+        {
+            let indexPath = IndexPath(item: i, section: 0)
+            
+            let availability = dataSource.calendarViewLayout(self, availabilityForItemAt: indexPath)
+            availabilities.append(availability)
+        }
+        
+        return availabilities
     }
     
     private var itemAttributes = [IndexPath: UICollectionViewLayoutAttributes]()
@@ -118,7 +84,7 @@ class CalendarViewLayout: UICollectionViewLayout
         {
             let indexPath = IndexPath(row: i, section: 0)
             
-            let interval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: indexPath)
+            let interval = dataSource.calendarViewLayout(self, availabilityForItemAt: indexPath).interval
             
             let startDateComponents = calendar.dateComponents([.hour, .minute, .weekday], from: interval.start)
             
@@ -209,43 +175,151 @@ class CalendarViewLayout: UICollectionViewLayout
 
 private extension CalendarViewLayout
 {
+//    func baseFrame(forItemAt itemIndexPath: IndexPath) -> CGRect
+//    {
+//        guard let collectionView = self.collectionView, let collectionViewDataSource = self.collectionView?.dataSource, let dataSource = self.dataSource else { return .zero }
+//
+//        let itemInterval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: itemIndexPath)
+//
+//        var count: CGFloat = 0
+//        var index: CGFloat = 0
+//
+//        var beforeIndexPath = true
+//
+//        for i in 0 ..< collectionViewDataSource.collectionView(collectionView, numberOfItemsInSection: 0)
+//        {
+//            let indexPath = IndexPath(row: i, section: 0)
+//
+//            if indexPath == itemIndexPath
+//            {
+//                beforeIndexPath = false
+//            }
+//
+//            let interval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: indexPath)
+//
+//            // Intervals may intersect with duration of 0 (such as when only one end overlaps), so ensure intersection is > 0
+//            if let intersection = interval.intersection(with: itemInterval), intersection.duration > 0
+//            {
+//                count += 1
+//
+//                if beforeIndexPath
+//                {
+//                    index += 1
+//                }
+//            }
+//        }
+//
+//        let width = self.contentWidth / count
+//
+//        let frame = CGRect(x: self.timeColumnWidth + (index * width), y: 0, width: width, height: 0)
+//        return frame
+//    }
+    
+//    func frame(forItemAt itemIndexPath: IndexPath) -> CGRect
+//    {
+//        var intersections = [Availability: Int]()
+//    }
+    
+//    func minimumWidth(forItemAt itemIndexPath: IndexPath) -> CGFloat
+//    {
+//        guard let dataSource = self.dataSource else { return 0.0 }
+//
+//        let interval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: itemIndexPath)
+//
+//        var hours = [DateInterval]()
+//        for hour in interval.startHour ..< interval.endHour
+//        {
+//            var components = Calendar.current.dateComponents([.hour, .minute, .weekday, .weekdayOrdinal], from: interval.start)
+//            components.hour = hour
+//
+//            let date = Calendar.current.date(from: components)!
+//
+//            let interval = DateInterval(start: date, duration: 60 * 60)
+//            hours.append(interval)
+//        }
+//
+//        let intervals = self.intervals
+//
+//        var maximumIntersections = 0
+//
+//        for hour in hours
+//        {
+//            let intersections = intervals.filter { $0.intersects(hour) && ($0.intersection(with: hour)!.duration > 0) }.count
+//
+//            if intersections > maximumIntersections
+//            {
+//                maximumIntersections = intersections
+//            }
+//        }
+//
+//        let width = self.contentWidth / CGFloat(maximumIntersections)
+//        return width
+//    }
+//
+//    func horizontalOffset(forItemAt itemIndexPath: IndexPath) -> CGFloat
+//    {
+//        guard let dataSource = self.dataSource else { return 0.0 }
+//
+//        let itemInterval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: itemIndexPath)
+//        let itemWidth = self.minimumWidth(forItemAt: itemIndexPath)
+//
+//        var intersectionIndexPaths = [IndexPath]()
+//
+//        for i in 0 ..< itemIndexPath.item
+//        {
+//            let indexPath = IndexPath(item: i, section: 0)
+//
+//            let interval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: indexPath)
+//
+//            if let intersection = interval.intersection(with: itemInterval), intersection.duration > 0
+//            {
+//                intersectionIndexPaths.append(indexPath)
+//            }
+//        }
+//
+//        var offset: CGFloat = 0.0
+//
+//        let sortedIndexPaths = intersectionIndexPaths.sorted { self.horizontalOffset(forItemAt: $0) < self.horizontalOffset(forItemAt: $1) }
+//        for indexPath in sortedIndexPaths
+//        {
+//            let x = self.horizontalOffset(forItemAt: indexPath)
+//            let width = self.minimumWidth(forItemAt: indexPath)
+//
+//            if x >= offset + itemWidth
+//            {
+//                return offset
+//            }
+//            else
+//            {
+//                offset = x + width
+//            }
+//        }
+//
+//        return offset
+//    }
+//
+//    func baseFrame(forItemAt itemIndexPath: IndexPath) -> CGRect
+//    {
+//        let offset = self.horizontalOffset(forItemAt: itemIndexPath)
+//        let width = self.minimumWidth(forItemAt: itemIndexPath)
+//
+//        let frame = CGRect(x: self.timeColumnWidth + offset, y: 0, width: width, height: 0)
+//        return frame
+//    }
+    
     func baseFrame(forItemAt itemIndexPath: IndexPath) -> CGRect
     {
-        guard let collectionView = self.collectionView, let collectionViewDataSource = self.collectionView?.dataSource, let dataSource = self.dataSource else { return .zero }
+        guard let dataSource = self.dataSource else { return .zero }
         
-        let itemInterval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: itemIndexPath)
+        let sortedUsers = Set(self.availabilities.filter { $0.interval.weekday == self.visibleWeekday }.map { $0.user }).sorted { $0.name < $1.name }
         
-        var count: CGFloat = 0
-        var index: CGFloat = 0
+        let availability = dataSource.calendarViewLayout(self, availabilityForItemAt: itemIndexPath)
+        let index = sortedUsers.index(of: availability.user)!
         
-        var beforeIndexPath = true
+        let width = self.contentWidth / CGFloat(sortedUsers.count)
+        let offset = CGFloat(index) * width
         
-        for i in 0 ..< collectionViewDataSource.collectionView(collectionView, numberOfItemsInSection: 0)
-        {
-            let indexPath = IndexPath(row: i, section: 0)
-            
-            if indexPath == itemIndexPath
-            {
-                beforeIndexPath = false
-            }
-            
-            let interval = dataSource.calendarViewLayout(self, dateIntervalForItemAt: indexPath)
-            
-            // Intervals may intersect with duration of 0 (such as when only one end overlaps), so ensure intersection is > 0
-            if let intersection = interval.intersection(with: itemInterval), intersection.duration > 0
-            {
-                count += 1
-                
-                if beforeIndexPath
-                {
-                    index += 1
-                }
-            }
-        }
-        
-        let width = self.contentWidth / count
-        
-        let frame = CGRect(x: self.timeColumnWidth + (index * width), y: 0, width: width, height: 0)
+        let frame = CGRect(x: self.timeColumnWidth + offset, y: 0, width: width, height: 0)
         return frame
     }
 }

@@ -30,9 +30,11 @@ class CalendarViewCell: UICollectionViewCell
         self.backgroundView = backgroundView
         
         NSLayoutConstraint.activate([
-            self.textLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -5),
+            self.textLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
             self.textLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -5)
         ])
+        
+        self.tintAdjustmentMode = .normal
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class NewEventViewController: UIViewController
 {
@@ -60,6 +59,11 @@ private extension NewEventViewController
     func `continue`()
     {
         self.performSegue(withIdentifier: "continue", sender: nil)
+    }
+    
+    @IBAction func cancel()
+    {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

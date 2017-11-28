@@ -15,13 +15,38 @@ struct Event: Codable
     var isRecurring: Bool = false
     var isPublic: Bool = false
     var URL: String = ""
-    
+
     var creator: User!
     
     var availabilityIntervals = [DateInterval]()
-    //var availabilities = Set<Availability>()
+    var availabilities = Set<Availability>()
     
     var invitedEmails = Set<String>()
     
     var joinedUsers = Set<User>()
+    
+    init()
+    {
+    }
+    
+    init(name: String, creator: User, isPublic: Bool, invitedEmails: Set<String>, joinedUsers: Set<User>)
+    {
+        self.name = name
+        self.creator = creator
+        self.isPublic = isPublic
+        self.invitedEmails = invitedEmails
+        self.joinedUsers = joinedUsers
+    }
+}
+
+extension Event: Hashable
+{
+    var hashValue: Int {
+        return self.name.hashValue
+    }
+    
+    static func ==(lhs: Event, rhs: Event) -> Bool
+    {
+        return lhs.name == rhs.name
+    }
 }

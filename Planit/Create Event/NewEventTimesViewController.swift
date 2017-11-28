@@ -12,13 +12,13 @@ class NewEventTimesViewController: UIViewController
 {
     var event: Event!
     
-    private var selectedWeekday: DateComponents.Weekday = .sunday {
+    private var selectedWeekday: Calendar.Weekday = .sunday {
         didSet {
             self.timesViewController.weekday = self.selectedWeekday
         }
     }
     
-    private var isAvailableAllDay = [DateComponents.Weekday: Bool]()
+    private var isAvailableAllDay = [Calendar.Weekday: Bool]()
     
     @IBOutlet var isAvailableAllDayButton: UISwitch!
     
@@ -42,7 +42,7 @@ class NewEventTimesViewController: UIViewController
     {
         super.viewDidLoad()
         
-        for weekday in [DateComponents.Weekday.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
+        for weekday in Calendar.Weekday.allValues
         {
             self.isAvailableAllDay[weekday] = true
         }
@@ -69,7 +69,7 @@ class NewEventTimesViewController: UIViewController
         case "continue":
             guard let invitationsViewController = segue.destination as? NewEventInvitationsViewController else { return }
             
-            var filteredIntervals = self.timesViewController.availabilityIntervals.filter { (interval) in
+            var filteredIntervals = self.timesViewController.availabilities.map { $0.interval}.filter { (interval) in
                 guard let weekday = Calendar(identifier: .gregorian).dateComponents([.weekday], from: interval.start).gregorianWeekday else { return true }
                 
                 let isAvailableAllDay = self.isAvailableAllDay[weekday] ?? false
@@ -90,7 +90,7 @@ class NewEventTimesViewController: UIViewController
                 }
             }
             
-            for weekday in [DateComponents.Weekday.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
+            for weekday in Calendar.Weekday.allValues
             {
                 let isEnabled: Bool
                 
@@ -207,13 +207,13 @@ extension NewEventTimesViewController: UIPickerViewDataSource, UIPickerViewDeleg
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
-        let day = DateComponents.Weekday(rawValue: row + 1)!
+        let day = Calendar.Weekday(rawValue: row + 1)!
         return day.localizedName
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        let day = DateComponents.Weekday(rawValue: row + 1)!
+        let day = Calendar.Weekday(rawValue: row + 1)!
         self.selectedWeekday = day
         
         self.update()

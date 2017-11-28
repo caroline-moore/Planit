@@ -11,6 +11,7 @@ import Foundation
 struct User: Codable
 {
     static var current: User?
+    static let temporary = User(name: "Me", email: "me@me.com", id: 1064)
     
     var identifier: Int = 0
     var name: String = ""
@@ -30,13 +31,12 @@ struct User: Codable
 
 extension User: Hashable
 {
-    var hashValue: Int
-    {
-        return self.identifier.hashValue
+    var hashValue: Int {
+        return self.name.hashValue
     }
     
     static func ==(lhs: User, rhs: User) -> Bool
     {
-        return lhs.identifier == rhs.identifier
+        return lhs.name == rhs.name
     }
 }

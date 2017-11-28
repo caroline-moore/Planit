@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 extension AuthorizationViewController
 {
@@ -118,6 +117,16 @@ private extension AuthorizationViewController
                 }
             }
         }
+        print("Authenticating user...")
+        
+        User.current = User(name: "Caroline", email: "carolimm@usc.edu", id: 3)
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func cancel()
+    {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

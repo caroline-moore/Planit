@@ -24,14 +24,20 @@
 		BFBDA0DD1FC26A14000C802C /* PanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBDA0DC1FC26A14000C802C /* PanGestureRecognizer.swift */; };
 		BFBDA0E11FC291E9000C802C /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBDA0E01FC291E8000C802C /* Availability.swift */; };
 		BFBDA0E31FC291F4000C802C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBDA0E21FC291F4000C802C /* User.swift */; };
+		BFBDA0E91FC29B46000C802C /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBDA0E81FC29B46000C802C /* EventViewController.swift */; };
 		BFD4BABA1FAFB2CB000FC94C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4BAB91FAFB2CB000FC94C /* AppDelegate.swift */; };
 		BFD4BABC1FAFB2CB000FC94C /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4BABB1FAFB2CB000FC94C /* LaunchViewController.swift */; };
 		BFD4BABF1FAFB2CB000FC94C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFD4BABD1FAFB2CB000FC94C /* Main.storyboard */; };
 		BFD4BAC11FAFB2CB000FC94C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD4BAC01FAFB2CB000FC94C /* Assets.xcassets */; };
 		BFD4BAC41FAFB2CB000FC94C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFD4BAC21FAFB2CB000FC94C /* LaunchScreen.storyboard */; };
 		BFD4BACE1FAFB6BE000FC94C /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4BACD1FAFB6BE000FC94C /* Button.swift */; };
-		BFD4BAD11FAFB7EB000FC94C /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4BAD01FAFB7EB000FC94C /* Assets.swift */; };
+		BFD4BAD11FAFB7EB000FC94C /* UIColor+Planit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD4BAD01FAFB7EB000FC94C /* UIColor+Planit.swift */; };
+		BFDBF2BB1FCCAD1E00FF6E57 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBF2BA1FCCAD1E00FF6E57 /* EventsViewController.swift */; };
+		BFDBF2BD1FCCB05400FF6E57 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBF2BC1FCCB05400FF6E57 /* EventsTableViewCell.swift */; };
 		BFDE15591FAFC3DE00BE866B /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDE15581FAFC3DE00BE866B /* AuthorizationViewController.swift */; };
+		BFE09DD51FCB928E002A24FF /* DateComponents+Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE09DD41FCB928E002A24FF /* DateComponents+Weekday.swift */; };
+		BFE09DD71FCB94F0002A24FF /* DateInterval+Hours.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE09DD61FCB94F0002A24FF /* DateInterval+Hours.swift */; };
+		BFED23BB1FCBEBFA00B0BFCF /* Date+CurrentWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFED23BA1FCBEBFA00B0BFCF /* Date+CurrentWeek.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +73,7 @@
 		BFBDA0DC1FC26A14000C802C /* PanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanGestureRecognizer.swift; sourceTree = "<group>"; };
 		BFBDA0E01FC291E8000C802C /* Availability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		BFBDA0E21FC291F4000C802C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BFBDA0E81FC29B46000C802C /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		BFD4BAB61FAFB2CB000FC94C /* Planit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFD4BAB91FAFB2CB000FC94C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFD4BABB1FAFB2CB000FC94C /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -75,8 +82,13 @@
 		BFD4BAC31FAFB2CB000FC94C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BFD4BAC51FAFB2CB000FC94C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFD4BACD1FAFB6BE000FC94C /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
-		BFD4BAD01FAFB7EB000FC94C /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		BFD4BAD01FAFB7EB000FC94C /* UIColor+Planit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Planit.swift"; sourceTree = "<group>"; };
+		BFDBF2BA1FCCAD1E00FF6E57 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		BFDBF2BC1FCCB05400FF6E57 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
 		BFDE15581FAFC3DE00BE866B /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
+		BFE09DD41FCB928E002A24FF /* DateComponents+Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+Weekday.swift"; sourceTree = "<group>"; };
+		BFE09DD61FCB94F0002A24FF /* DateInterval+Hours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateInterval+Hours.swift"; sourceTree = "<group>"; };
+		BFED23BA1FCBEBFA00B0BFCF /* Date+CurrentWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+CurrentWeek.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,13 +128,6 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		82941F091FCBDBEA00270C87 /* Sockets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Sockets;
-			sourceTree = "<group>";
-		};
 		BF2396C91FB03641008DDF0D /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,16 +165,18 @@
 				BFBDA0DA1FC244B9000C802C /* CalendarViewCell.swift */,
 				BF0DFF721FBA7851001B7FCE /* CalendarViewLayout.swift */,
 				BFBDA0D81FC23743000C802C /* CalendarTimeDecorationView.swift */,
-				BF5A01B41FBA3DDB0085B7F8 /* Collection View */,
 			);
 			path = Times;
 			sourceTree = "<group>";
 		};
-		BF5A01B41FBA3DDB0085B7F8 /* Collection View */ = {
+		BFBDA0E71FC29B3A000C802C /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				BFDBF2BA1FCCAD1E00FF6E57 /* EventsViewController.swift */,
+				BFDBF2BC1FCCB05400FF6E57 /* EventsTableViewCell.swift */,
+				BFBDA0E81FC29B46000C802C /* EventViewController.swift */,
 			);
-			path = "Collection View";
+			path = Events;
 			sourceTree = "<group>";
 		};
 		BFD4BAAD1FAFB2CB000FC94C = {
@@ -194,10 +201,10 @@
 		BFD4BAB81FAFB2CB000FC94C /* Planit */ = {
 			isa = PBXGroup;
 			children = (
-				82941F091FCBDBEA00270C87 /* Sockets */,
 				BFD4BAB91FAFB2CB000FC94C /* AppDelegate.swift */,
 				BFD4BABB1FAFB2CB000FC94C /* LaunchViewController.swift */,
 				BFDE15581FAFC3DE00BE866B /* AuthorizationViewController.swift */,
+				BFBDA0E71FC29B3A000C802C /* Events */,
 				BF5A01B11FBA3C7E0085B7F8 /* Times */,
 				BF2396CA1FB03648008DDF0D /* Create Event */,
 				BF2396C91FB03641008DDF0D /* Model */,
@@ -224,7 +231,10 @@
 		BFD4BACF1FAFB7CB000FC94C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BFD4BAD01FAFB7EB000FC94C /* Assets.swift */,
+				BFD4BAD01FAFB7EB000FC94C /* UIColor+Planit.swift */,
+				BFE09DD41FCB928E002A24FF /* DateComponents+Weekday.swift */,
+				BFE09DD61FCB94F0002A24FF /* DateInterval+Hours.swift */,
+				BFED23BA1FCBEBFA00B0BFCF /* Date+CurrentWeek.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -370,19 +380,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFD4BABC1FAFB2CB000FC94C /* LaunchViewController.swift in Sources */,
+				BFED23BB1FCBEBFA00B0BFCF /* Date+CurrentWeek.swift in Sources */,
 				BFD4BACE1FAFB6BE000FC94C /* Button.swift in Sources */,
 				BFBDA0D91FC23743000C802C /* CalendarTimeDecorationView.swift in Sources */,
-				BFD4BAD11FAFB7EB000FC94C /* Assets.swift in Sources */,
+				BFD4BAD11FAFB7EB000FC94C /* UIColor+Planit.swift in Sources */,
 				82941F071FCBD78E00270C87 /* PlanitAPI.swift in Sources */,
 				BF2A55871FB946EE00AD4DEE /* NewEventTimesViewController.swift in Sources */,
 				BFBDA0E11FC291E9000C802C /* Availability.swift in Sources */,
 				BF2396CE1FB03738008DDF0D /* NewEventInvitationsViewController.swift in Sources */,
 				82941F0B1FCC22BD00270C87 /* JSON.swift in Sources */,
+				BFDBF2BD1FCCB05400FF6E57 /* EventsTableViewCell.swift in Sources */,
+				BFBDA0E91FC29B46000C802C /* EventViewController.swift in Sources */,
+				BFE09DD51FCB928E002A24FF /* DateComponents+Weekday.swift in Sources */,
+				BFDBF2BB1FCCAD1E00FF6E57 /* EventsViewController.swift in Sources */,
 				BFBDA0E31FC291F4000C802C /* User.swift in Sources */,
 				BFBDA0DD1FC26A14000C802C /* PanGestureRecognizer.swift in Sources */,
 				BFDE15591FAFC3DE00BE866B /* AuthorizationViewController.swift in Sources */,
 				BF0DFF731FBA7851001B7FCE /* CalendarViewLayout.swift in Sources */,
 				BF2396CC1FB03726008DDF0D /* NewEventViewController.swift in Sources */,
+				BFE09DD71FCB94F0002A24FF /* DateInterval+Hours.swift in Sources */,
 				BF2396C81FB035F2008DDF0D /* Event.swift in Sources */,
 				BFD4BABA1FAFB2CB000FC94C /* AppDelegate.swift in Sources */,
 				BF5A01B31FBA3CC10085B7F8 /* TimesViewController.swift in Sources */,

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 extension NewEventInvitationsViewController
 {
@@ -26,6 +25,8 @@ extension NewEventInvitationsViewController
 class NewEventInvitationsViewController: UIViewController
 {
     var event: Event!
+    
+    private var isReadyToUploadEvent = false
     
     private var invitedEmails = [String]()
 
@@ -46,6 +47,16 @@ class NewEventInvitationsViewController: UIViewController
         self.inviteTextField.rightViewMode = .always
         
         self.validate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        
+        if self.isReadyToUploadEvent && User.current != nil
+        {
+            self.uploadEvent()
+        }
     }
     
     override func viewDidLayoutSubviews()
@@ -119,6 +130,24 @@ private extension NewEventInvitationsViewController
                 
             }
         }
+        
+        if User.current == nil
+        {
+            DispatchQueue.main.async {
+                let alertController = UIAlertController(title: "Not Logged In", message: "Please log in to finish creating an event.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "Log In", style: .default, handler: { (action) in
+                    self.isReadyToUploadEvent = true
+                    self.performSegue(withIdentifier: "logIn", sender: nil)
+                }))
+                
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+        else
+        {
+            self.uploadEvent()
+        }
     }
     
     @IBAction func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer)
@@ -142,6 +171,18 @@ private extension NewEventInvitationsViewController
         }
         
         self.validate()
+    }
+}
+
+private extension NewEventInvitationsViewController
+{
+    func uploadEvent()
+    {
+        self.isReadyToUploadEvent = false
+        
+        print("Uploading event:", self.event)
+        
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

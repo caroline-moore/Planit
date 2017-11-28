@@ -40,11 +40,13 @@ class EventViewController: UIViewController
     
     private lazy var eventStore = EKEventStore()
     
+    private let listeningPlanitAPI = PlanitAPI()
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        self.prepareEvent()
+        NotificationCenter.default.addObserver(self, selector: #selector(EventViewController.didUpdateEvent(with:)), name: .updatedEvent, object: nil)
         
         self.timesViewController.availabilities = self.event.availabilities.sorted()
         
@@ -59,6 +61,9 @@ class EventViewController: UIViewController
                 self.state = .joined
             }
         }
+        
+        self.listeningPlanitAPI.connect()
+        self.listeningPlanitAPI.listenForEventUpdates()
         
         self.update()
     }
@@ -82,6 +87,10 @@ class EventViewController: UIViewController
         
         self.timesViewController = segue.destination as! TimesViewController
         self.timesViewController.weekday = .monday
+    }
+    
+    deinit {
+        self.listeningPlanitAPI.stopListeningForEventUpdates()
     }
 }
 
@@ -116,81 +125,77 @@ private extension EventViewController
         }
     }
     
+    func updateEvent()
+    {
+        if let index = User.current?.createdEvents.index(of: self.event)
+        {
+            User.current?.createdEvents[index] = self.event
+        }
+        
+        if let index = User.current?.joinedEvents.index(of: self.event)
+        {
+            User.current?.joinedEvents[index] = self.event
+        }
+        
+        if let index = User.current?.invitedEvents.index(of: self.event)
+        {
+            User.current?.invitedEvents[index] = self.event
+        }
+        
+        guard self.event.creator != User.current else { return }
+        
+        if self.event.joinedUsers.contains(User.current!)
+        {
+            if User.current?.joinedEvents.contains(self.event) == false
+            {
+                User.current?.joinedEvents.append(self.event)
+            }
+            
+            if let index = User.current?.invitedEvents.index(of: self.event)
+            {
+                User.current?.invitedEvents.remove(at: index)
+            }
+        }
+        else
+        {
+            if User.current?.invitedEvents.contains(self.event) == false
+            {
+                User.current?.invitedEvents.append(self.event)
+            }
+            
+            if let index = User.current?.joinedEvents.index(of: self.event)
+            {
+                User.current?.joinedEvents.remove(at: index)
+            }
+        }
+    }
+    
     func uploadEvent()
     {
         print("Uploading event...")
+        
+        PlanitAPI.shared.update(self.event) { (success) in
+            if !success
+            {
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: "Failed to Update Event", message: "Please make sure you are connected to the internet and try again.", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+            else
+            {
+                print("Success updating event!")
+            }
+        }
     }
 }
 
 private extension EventViewController
 {
-    func prepareEvent()
-    {
-        if self.event == nil
-        {
-            self.event = Event()
-            self.event.name = "201 Meeting"
-            self.event.creator = User.current
-        }        
-        
-        self.event.availabilities = Set(self.generateRandomAvailabilities())
-    }
-    
-    func generateRandomAvailabilities() -> [Availability]
-    {
-        let source = GKARC4RandomSource(seed: "hello world".data(using: .utf8)!)
-        source.dropValues(1200)
-        
-        let users = ["Tyler", "Alex", "Gordon", "Yuchuan", "Will"].map { (name) -> User in
-            let user = User(name: name, email: "email", id: 0)
-            return user
-        }
-        
-        var availabilites = [Availability]()
-        
-        for _ in 0 ..< 40
-        {
-            let availability = self.randomAvailability(from: users, using: source)
-            availabilites.append(availability)
-        }
-        
-        availabilites.sort()
-        
-        availabilites.forEach { print($0) }
-        
-        return availabilites
-    }
-    
-    func randomAvailability(from users: [User], using source: GKARC4RandomSource) -> Availability
-    {
-        let user = users[source.nextInt(upperBound: users.count)]
-        let day = Calendar.Weekday.allValues[source.nextInt(upperBound: Calendar.Weekday.allValues.count)]
-        
-        while true
-        {
-            let hour1 = source.nextInt(upperBound: 12) + 8
-            let hour2 = source.nextInt(upperBound: 12) + 8
-            
-            if hour1 == hour2
-            {
-                continue
-            }
-            
-            let startDate = DateComponents(calendar: Calendar.current, hour: min(hour1, hour2), weekday: day.rawValue, weekdayOrdinal: 1).date!
-            let endDate = DateComponents(calendar: Calendar.current, hour: max(hour1, hour2), weekday: day.rawValue, weekdayOrdinal: 1).date!
-            
-            let interval = DateInterval(start: startDate, end: endDate)
-            
-            let availability = Availability(user: user, interval: interval)
-            return availability
-        }
-        
-        fatalError()
-    }
-    
     func prepareWeekdaySegmentedControl()
     {
-        self.sortedWeekdays = Set(self.event.availabilities.map { $0.interval.weekday }).sorted { $0.rawValue < $1.rawValue }
+        self.sortedWeekdays = Set(self.event.availabilityIntervals.map { $0.weekday }).sorted { $0.rawValue < $1.rawValue }
         
         self.weekdaySegmentedControl.removeAllSegments()
         
@@ -201,6 +206,15 @@ private extension EventViewController
         
         self.weekdaySegmentedControl.selectedSegmentIndex = 0
         self.timesViewController.weekday = self.sortedWeekdays[0]
+    }
+    
+    @objc func didUpdateEvent(with notification: Notification)
+    {
+        guard let event = notification.object as? Event else { return }
+        
+        self.event = event
+        
+        self.updateEvent()
     }
 }
 
@@ -225,8 +239,11 @@ extension EventViewController
             
             self.event.joinedUsers.insert(user)
             self.state = .joined
+            
+            self.uploadEvent()
         }
         
+        self.updateEvent()
         self.update()
     }
     
@@ -236,6 +253,8 @@ extension EventViewController
         
         self.event.joinedUsers.remove(user)
         self.state = .viewing
+        
+        self.updateEvent()
         
         self.timesViewController.availabilities = self.timesViewController.availabilities.filter { $0.user != User.current }
         

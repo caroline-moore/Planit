@@ -142,7 +142,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="68T-Gp-kWJ">
                                                 <rect key="frame" x="0.0" y="31.666666666666657" width="315" height="21"/>
                                                 <subviews>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Super Awesome Event" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kvv-Wh-HE7">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="CSCI 201 Project" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kvv-Wh-HE7">
                                                         <rect key="frame" x="0.0" y="0.0" width="315" height="18"/>
                                                         <color key="textColor" name="PlanitPurple"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -970,7 +970,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Tok-Sb-wFx">
                                                 <rect key="frame" x="0.0" y="21.666666666666654" width="315" height="49.666666666666657"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s3a-Nt-dV0">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s3a-Nt-dV0">
                                                         <rect key="frame" x="0.0" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="S">
@@ -983,7 +983,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="jIS-yr-KKA"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPi-Y1-7kn">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPi-Y1-7kn">
                                                         <rect key="frame" x="47.666666666666671" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="M">
@@ -996,7 +996,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="3mj-yj-GU3"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RrO-kM-IRq">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RrO-kM-IRq">
                                                         <rect key="frame" x="95" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="T">
@@ -1009,7 +1009,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="u50-D1-eZT"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBy-c7-OZ3">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBy-c7-OZ3">
                                                         <rect key="frame" x="142.66666666666666" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="W">
@@ -1022,7 +1022,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="eUx-5K-gA2"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdj-dB-ay0">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdj-dB-ay0">
                                                         <rect key="frame" x="190" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="Th">
@@ -1035,7 +1035,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="USI-DB-Oj0"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YdY-ii-lLt">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YdY-ii-lLt">
                                                         <rect key="frame" x="237.66666666666669" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="F">
@@ -1048,7 +1048,7 @@
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="bI8-wB-mKn"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Mc-sn-l9R">
+                                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Mc-sn-l9R">
                                                         <rect key="frame" x="285" y="6" width="30" height="38"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                                         <state key="normal" title="Sa">

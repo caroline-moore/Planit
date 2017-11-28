@@ -40,6 +40,6 @@ class EventsTableViewCell: UITableViewCell
         self.roundedBackgroundView.layer.shadowColor = UIColor.black.cgColor
         self.roundedBackgroundView.layer.shadowRadius = 16.0
         self.roundedBackgroundView.layer.shadowOffset = CGSize(width: 0.0, height: 16.0)
-        self.roundedBackgroundView.layer.shadowOpacity = 0.2
+        self.roundedBackgroundView.layer.shadowOpacity = 0.15
     }
 }

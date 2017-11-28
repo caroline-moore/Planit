@@ -91,17 +91,23 @@ private extension AuthorizationViewController
     
     @IBAction func authorize()
     {
+        print("Authenticating user...")
+        
         switch self.authorizationType
         {
         case .logIn:
             PlanitAPI.shared.logIn(self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in
-                if success
-                {
-                    
-                }
-                else
-                {
-                    
+                DispatchQueue.main.async {
+                    if success
+                    {
+                        self.fetchEvents()
+                    }
+                    else
+                    {
+                        let alertController = UIAlertController(title: "Failed to Log In", message: "Please make sure you entered your username and password correctly, and try again.", preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                    }
                 }
             }
             
@@ -109,24 +115,73 @@ private extension AuthorizationViewController
             PlanitAPI.shared.signUp(self.emailTextField.text!, username:self.usernameTextField.text!, password:self.passwordTextField.text!) { (success) in
                 if success
                 {
-                    
+                    self.fetchEvents()
                 }
                 else
                 {
-                    
+                    let alertController = UIAlertController(title: "Failed to Sign Up", message: "Please make sure you entered valid information and are connected to the internet, and try again.", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
                 }
             }
         }
-        print("Authenticating user...")
-        
-        User.current = User(name: "Caroline", email: "carolimm@usc.edu", id: 3)
-        
-        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancel()
     {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+private extension AuthorizationViewController
+{
+    func fetchEvents()
+    {
+        func presentErrorAlert()
+        {
+            DispatchQueue.main.async {
+                let alertController = UIAlertController(title: "Failed to Fetch User Info", message: "Please make sure you are connected to the internet, and try again.", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+        
+        PlanitAPI.shared.getEvents(ofType: "created", forUser: User.current!) { (events) in
+            if let events = events
+            {
+                User.current?.createdEvents = events
+                
+                PlanitAPI.shared.getEvents(ofType: "joined", forUser: User.current!) { (events) in
+                    if let events = events
+                    {
+                        User.current?.joinedEvents = events
+                        
+                        PlanitAPI.shared.getEvents(ofType: "invited", forUser: User.current!) { (events) in
+                            if let events = events
+                            {
+                                User.current?.invitedEvents = events
+                                
+                                DispatchQueue.main.async {
+                                    self.dismiss(animated: true, completion: nil)
+                                }
+                            }
+                            else
+                            {
+                                presentErrorAlert()
+                            }
+                        }
+                    }
+                    else
+                    {
+                        presentErrorAlert()
+                    }
+                }
+            }
+            else
+            {
+                presentErrorAlert()
+            }
+        }
     }
 }
 

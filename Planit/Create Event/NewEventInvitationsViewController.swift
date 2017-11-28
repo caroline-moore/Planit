@@ -105,32 +105,6 @@ private extension NewEventInvitationsViewController
         
         self.event.creator = User.current
         
-//        do
-//        {
-//            let encoder = JSONEncoder()
-//            encoder.outputFormatting = .prettyPrinted
-//
-//            let data = try encoder.encode(self.event)
-//
-//            let string = String(data: data, encoding: .utf8)!
-//            print(string)
-//        }
-//        catch
-//        {
-//            print(error)
-//        }
-        
-        PlanitAPI.shared.create(event) { (success) in
-            if success
-            {
-                
-            }
-            else
-            {
-                
-            }
-        }
-        
         if User.current == nil
         {
             DispatchQueue.main.async {
@@ -140,7 +114,7 @@ private extension NewEventInvitationsViewController
                     self.isReadyToUploadEvent = true
                     self.performSegue(withIdentifier: "logIn", sender: nil)
                 }))
-                
+
                 self.present(alertController, animated: true, completion: nil)
             }
         }
@@ -179,10 +153,26 @@ private extension NewEventInvitationsViewController
     func uploadEvent()
     {
         self.isReadyToUploadEvent = false
+        self.event.creator = User.current
         
         print("Uploading event:", self.event)
         
-        self.dismiss(animated: true, completion: nil)
+        PlanitAPI.shared.create(event) { (success) in
+            DispatchQueue.main.async {
+                if success
+                {
+                    User.current?.createdEvents.append(self.event)
+                    
+                    self.dismiss(animated: true, completion: nil)
+                }
+                else
+                {
+                    let alertController = UIAlertController(title: "Failed to Create Event", message: "Please make sure you are connected to the internet and try again.", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
     }
 }
 

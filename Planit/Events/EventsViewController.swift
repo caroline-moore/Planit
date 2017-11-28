@@ -22,16 +22,12 @@ class EventsViewController: UITableViewController
 {
     var eventsFilter: EventsFilter = .created
     
-    var createdEvents = [Event]()
-    var joinedEvents = [Event]()
-    var invitedEvents = [Event]()
-    
     private var events: [Event] {
         switch self.eventsFilter
         {
-        case .created: return self.createdEvents
-        case .joined: return self.joinedEvents
-        case .invited: return self.invitedEvents
+        case .created: return User.current!.createdEvents
+        case .joined: return User.current!.joinedEvents
+        case .invited: return User.current!.invitedEvents
         }
     }
     
@@ -43,30 +39,13 @@ class EventsViewController: UITableViewController
         super.viewDidLoad()
         
         self.tableView.tableHeaderView = self.eventsFilterSegmentedControlContainerView
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
         
-        let users = ["Tyler", "Alex", "Gordon", "Yuchuan", "Will"].map { (name) -> User in
-            let user = User(name: name, email: "email", id: 0)
-            return user
-        }
-        
-        self.createdEvents = [
-            Event(name: "Event 1", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0]]),
-            Event(name: "Event 2", creator: User.current!, isPublic: false, invitedEmails: ["1", "2", "3"], joinedUsers: [users[1], users[2]]),
-            Event(name: "Event 3", creator: User.current!, isPublic: false, invitedEmails: ["1", "2", "3", "5", "6", "7"], joinedUsers: [users[3], users[4], users[0], users[1], users[2]]),
-            Event(name: "Event 4", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0], users[1]]),
-            Event(name: "Event 5", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0]]),
-        ]
-        
-        self.joinedEvents = [
-            Event(name: "Joined Event 1", creator: users[0], isPublic: false, invitedEmails: ["1", "2", "3", "4", "5"], joinedUsers: [User.current!]),
-            Event(name: "Joined Event 2", creator: users[1], isPublic: true, invitedEmails: [], joinedUsers: [users[1], User.current!]),
-            Event(name: "Joined Event 3", creator: users[2], isPublic: false, invitedEmails: ["1", "2", "3", "5", "6", "7"], joinedUsers: [users[3], users[4], users[0], users[1], User.current!]),
-        ]
-        
-        self.invitedEvents = [
-            Event(name: "Invited Event 1", creator: users[0], isPublic: false, invitedEmails: ["1", "2", "3"], joinedUsers: []),
-            Event(name: "Invited Event 2", creator: users[1], isPublic: false, invitedEmails: ["1"], joinedUsers: [users[1]]),
-        ]
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning()
@@ -137,7 +116,7 @@ extension EventsViewController
         let event = self.events[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! EventsTableViewCell
-        cell.roundedBackgroundView.backgroundColor = UIColor.contentColors[indexPath.row]
+        cell.roundedBackgroundView.backgroundColor = UIColor.contentColors[indexPath.row % UIColor.contentColors.count]
         cell.creatorLabel.text = "By " + event.creator.name
         cell.eventNameLabel.text = event.name
         
@@ -154,12 +133,28 @@ extension EventsViewController
         {
             cell.joinedUsersStackView.isHidden = false
             
-            cell.invitedUsersCountLabel.text = event.invitedEmails.count.description
+            cell.invitedUsersCountLabel.text = (event.invitedEmails.count + 1).description
             cell.joinedUsersCountLabel.text = event.joinedUsers.count.description
             
             cell.isPrivateImageView.isHidden = false
         }
         
+        cell.contentView.clipsToBounds = false
+        cell.clipsToBounds = false
+        cell.roundedBackgroundView.clipsToBounds = false
+        
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        let cell = cell as! EventsTableViewCell
+        
+        cell.clipsToBounds = false
+        cell.contentView.clipsToBounds = false
+        cell.roundedBackgroundView.clipsToBounds = false
+        
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
     }
 }

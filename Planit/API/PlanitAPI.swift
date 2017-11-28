@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftSocket
+import GameKit
 
 extension Notification.Name
 {
@@ -18,24 +19,41 @@ extension Notification.Name
 class PlanitAPI
 {
     static let shared = PlanitAPI()
+    
+    private var useDummyData = true
+    
     let client = TCPClient(address: "172.20.10.3", port: 6789)
     var connected : Bool
     
     private let networkingQueue = DispatchQueue(label: "com.carolinemoore.PlanitAPI.networkingQueue", attributes: [.concurrent])
+    private let listeningNetworkingQueue = DispatchQueue(label: "com.carolinemoore.PlanitAPI.listeningNetworkQueue", attributes: [.concurrent])
+    
+    private let randomSource: GKARC4RandomSource = {
+        let source = GKARC4RandomSource(seed: "hello world".data(using: .utf8)!)
+        source.dropValues(1200)
+        return source
+    }()
     
     init()
     {
-        connected = false
+        if self.useDummyData
+        {
+            connected = true
+        }
+        else
+        {
+            connected = false
+        }
     }
     
     func connect()
     {
-        self.networkingQueue.async {
+        self.networkingQueue.async { [weak self] in
             
-            switch self.client.connect(timeout: 10)
+            switch self?.client.connect(timeout: 10) ?? .success
             {
             case .success:
-                self.connected = true
+                self?.connected = true
             case .failure(let error):
                 print(error)
             }
@@ -87,118 +105,40 @@ class PlanitAPI
     
     
     
-    func listenForUpdates(forEvent: Event)
+    func listenForEventUpdates()
     {
-        while (true)
-        {
-            do
+        self.listeningNetworkingQueue.async { [weak self] in
+            while (self?.connected == false)
             {
-                guard let jsonData = self.receiveData() else { continue }
-                
-                let decoder = JSONDecoder()
-                let json = try decoder.decode(EventJSON.self, from: jsonData)
-                
-                let updatedEvent = json.event
-                
-                NotificationCenter.default.post(name: .updatedEvent, object: updatedEvent)
             }
-            catch
-            {
-                print(error)
-            }
-        }
-    }
-    
-    
-    
-    func get(eventForID: Int, completion: @escaping (Event?) -> Void)
-    {
-        if (connected == false)
-        {
-            completion(nil)
-            return
-        }
-        
-        self.networkingQueue.async {
             
-            var data = EventIdJSON()
-            data.type = "getevent"
-            data.eventID = eventForID
+            print("Connected and listening for event updates!")
             
-            do
+            while (self?.connected == true)
             {
-                let result = try self.sendData(data: data)
-                
-                switch result
+                do
                 {
-                case .success:
-                    guard let jsonData = self.receiveData() else { completion(nil); return }
+                    guard let jsonData = self?.receiveData() else { continue }
                     
                     let decoder = JSONDecoder()
                     let json = try decoder.decode(EventJSON.self, from: jsonData)
                     
-                    let event = json.event
+                    let updatedEvent = json.event
                     
-                    completion(event)
-                    
-                case .failure(let error):
-                    print(error)
-                    completion(nil)
+                    NotificationCenter.default.post(name: .updatedEvent, object: updatedEvent)
                 }
-            }
-            catch
-            {
-                print(error)
-            }
-            
-        }
-    }
-    
-    
-    
-    func get(userForID: Int, completion: @escaping (User?) -> Void)
-    {
-        if (connected == false)
-        {
-            completion(nil)
-            return
-        }
-        
-        self.networkingQueue.async {
-            
-            var data = UserIdJSON()
-            data.type = "getuser"
-            data.userID = userForID
-            
-            do
-            {
-                let result = try self.sendData(data: data)
-                
-                switch result
+                catch
                 {
-                case .success:
-                    guard let jsonData = self.receiveData() else { completion(nil); return }
-                    
-                    let decoder = JSONDecoder()
-                    let json = try decoder.decode(UserJSON.self, from: jsonData)
-                    
-                    let user = json.user
-                    
-                    completion(user)
-                case .failure(let error):
                     print(error)
-                    completion(nil)
                 }
             }
-            catch
-            {
-                print(error)
-            }
-            
         }
     }
     
-    
+    func stopListeningForEventUpdates()
+    {
+        self.connected = false
+    }
     
     func getEvents(ofType: String, forUser: User, completion: @escaping (Array<Event>?) -> Void)
     {
@@ -209,6 +149,26 @@ class PlanitAPI
         }
         
         self.networkingQueue.async {
+            
+            if self.useDummyData
+            {
+                let (created, joined, invited) = self.generateEvents()
+                
+                switch ofType
+                {
+                case "created":
+                    completion(created)
+                case "joined":
+                    completion(joined)
+                case "invited":
+                    completion(invited)
+                default:
+                    completion(nil)
+                    return
+                }
+                
+                return
+            }
             
             var data = UserIdJSON()
             data.userID = forUser.identifier
@@ -266,6 +226,14 @@ class PlanitAPI
         }
         
         self.networkingQueue.async {
+            
+            if self.useDummyData
+            {
+                completion(true)
+                
+                return
+            }
+            
             do
             {
                 var data = EventJSON()
@@ -303,6 +271,59 @@ class PlanitAPI
     }
     
     
+    func update(_ event: Event, completion: @escaping (Bool) -> Void)
+    {
+        if (connected == false)
+        {
+            completion(false)
+            return
+        }
+        
+        self.networkingQueue.async {
+            
+            if self.useDummyData
+            {
+                completion(true)
+                
+                return
+            }
+            
+            do
+            {
+                var data = EventJSON()
+                data.type = "updateevent"
+                data.event = event
+                
+                let result = try self.sendData(data: data)
+                
+                switch result
+                {
+                case .success:
+                    guard let data = self.receiveData() else { completion(false); return }
+                    
+                    if let response = String(data: data, encoding: .utf8)
+                    {
+                        if (response == "true")
+                        {
+                            completion(true)
+                        }
+                        else
+                        {
+                            completion(false)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                    completion(false)
+                }
+            }
+            catch
+            {
+                print(error)
+            }
+        }
+    }
+    
     
     func signUp(_ email: String, username: String, password: String, completion: @escaping (Bool) -> Void)
     {
@@ -313,6 +334,16 @@ class PlanitAPI
         }
         
         self.networkingQueue.async {
+            
+            if self.useDummyData
+            {
+                let user = self.generateUser()
+                User.current = user
+                
+                completion(true)
+                
+                return
+            }
             
             let userData = ["type": "signup", "email": email, "username": username, "password": password]
             
@@ -358,6 +389,16 @@ class PlanitAPI
         
         self.networkingQueue.async {
             
+            if self.useDummyData
+            {
+                let user = self.generateUser()
+                User.current = user
+                
+                completion(true)
+                
+                return
+            }
+            
             let userData = ["type": "login", "username": username, "password": password]
             
             do
@@ -395,5 +436,114 @@ class PlanitAPI
             }
             
         }
+    }
+}
+
+private extension PlanitAPI
+{
+    func generateUser() -> User
+    {
+        let user = User(name: "Caroline", email: "carolimm@usc.edu", id: 117)
+        return user
+    }
+    
+    func generateEvents() -> ([Event], [Event], [Event])
+    {
+        let users = ["Tyler", "Alex", "Gordon", "Yuchuan", "Will"].map { (name) -> User in
+            let user = User(name: name, email: "email", id: 0)
+            return user
+        }
+        
+        let createdEvents = [
+            Event(name: "Created Event 1", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0]]),
+            Event(name: "Created Event 2", creator: User.current!, isPublic: false, invitedEmails: ["1", "2", "3"], joinedUsers: [users[1], users[2]]),
+            Event(name: "Created Event 3", creator: User.current!, isPublic: false, invitedEmails: ["1", "2", "3", "5", "6", "7"], joinedUsers: [users[3], users[4], users[0], users[1], users[2]]),
+            Event(name: "Created Event 4", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0], users[1]]),
+            Event(name: "Created Event 5", creator: User.current!, isPublic: true, invitedEmails: [], joinedUsers: [users[0]]),
+        ]
+        
+        let joinedEvents = [
+            Event(name: "Joined Event 1", creator: users[0], isPublic: false, invitedEmails: ["1", "2", "3", "4", "5"], joinedUsers: [User.current!]),
+            Event(name: "Joined Event 2", creator: users[1], isPublic: true, invitedEmails: [], joinedUsers: [users[1], User.current!]),
+            Event(name: "Joined Event 3", creator: users[2], isPublic: false, invitedEmails: ["1", "2", "3", "5", "6", "7"], joinedUsers: [users[3], users[4], users[0], users[1], User.current!]),
+        ]
+        
+        let invitedEvents = [
+            Event(name: "Invited Event 1", creator: users[0], isPublic: false, invitedEmails: ["1", "2", "3"], joinedUsers: []),
+            Event(name: "Invited Event 2", creator: users[1], isPublic: false, invitedEmails: ["1"], joinedUsers: [users[1]]),
+        ]
+        
+        func update(_ event: Event) -> Event
+        {
+            var event = event
+            
+            let (availabilities, intervals) = self.generateRandomAvailabilities(for: event)
+            event.availabilities = Set(availabilities)
+            event.availabilityIntervals = intervals
+            
+            return event
+        }
+        
+        let updatedCreatedEvents = createdEvents.map(update)
+        let updatedJoinedEvents = joinedEvents.map(update)
+        let updatedInvitedEvents = invitedEvents.map(update)
+        
+        return (updatedCreatedEvents, updatedJoinedEvents, updatedInvitedEvents)
+    }
+    
+    func generateRandomAvailabilities(for event: Event) -> ([Availability], [DateInterval])
+    {
+        let users = ["Tyler", "Alex", "Gordon", "Yuchuan", "Will"].map { (name) -> User in
+            let user = User(name: name, email: "email", id: 0)
+            return user
+        }
+        
+        var availabilites = [Availability]()
+        var availabilityIntervals = [DateInterval]()
+        
+        for _ in 0 ..< 40
+        {
+            let availability = self.randomAvailability(from: users, using: self.randomSource)
+            availabilites.append(availability)
+        }
+        
+        for _ in 0 ..< 20
+        {
+            let availability = self.randomAvailability(from: users, using: self.randomSource)
+            availabilityIntervals.append(availability.interval)
+        }
+        
+        availabilites.sort()
+        
+        availabilites.forEach { print($0) }
+        
+        return (availabilites, availabilityIntervals)
+    }
+    
+    func randomAvailability(from users: [User], using source: GKARC4RandomSource) -> Availability
+    {
+        let user = users[source.nextInt(upperBound: users.count)]
+        let day = Calendar.Weekday.allValues[source.nextInt(upperBound: Calendar.Weekday.allValues.count)]
+        
+        while true
+        {
+            let hour1 = source.nextInt(upperBound: 12) + 8
+            let hour2 = source.nextInt(upperBound: 12) + 8
+            
+            if hour1 == hour2
+            {
+                continue
+            }
+            
+            let startDate = DateComponents(calendar: Calendar.current, hour: min(hour1, hour2), weekday: day.rawValue, weekdayOrdinal: 1).date!
+            let endDate = DateComponents(calendar: Calendar.current, hour: max(hour1, hour2), weekday: day.rawValue, weekdayOrdinal: 1).date!
+            
+            let interval = DateInterval(start: startDate, end: endDate)
+            
+            let availability = Availability(user: user, interval: interval)
+            return availability
+        }
+        
+        fatalError()
     }
 }

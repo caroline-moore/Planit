@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -102,7 +103,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" name="PlanitBlue"/>
+                        <color key="backgroundColor" name="PlanitPurple"/>
                         <constraints>
                             <constraint firstItem="rNN-yT-omK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ArC-DK-3HC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rNN-yT-omK" secondAttribute="bottom" constant="44" id="x92-9j-xry"/>
@@ -111,6 +112,7 @@
                     </view>
                     <connections>
                         <outlet property="planitLabel" destination="2Wm-hI-Ee6" id="WDn-48-vg9"/>
+                        <segue destination="pzF-wK-DJA" kind="presentation" identifier="showEvents" modalTransitionStyle="flipHorizontal" id="IHt-X6-wyG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -142,7 +144,7 @@
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Super Awesome Event" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kvv-Wh-HE7">
                                                         <rect key="frame" x="0.0" y="0.0" width="315" height="18"/>
-                                                        <color key="textColor" name="PlanitBlue"/>
+                                                        <color key="textColor" name="PlanitPurple"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done" enablesReturnKeyAutomatically="YES" textContentType="name"/>
                                                         <connections>
@@ -231,7 +233,7 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="tintColor" name="PlanitBlue"/>
+                        <color key="tintColor" name="PlanitPurple"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="mMf-cW-djU" firstAttribute="top" secondItem="bXv-ik-J71" secondAttribute="top" constant="75" id="1Us-y5-cOp"/>
@@ -249,9 +251,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="New Event" id="nSO-c6-JiJ">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="MMn-3J-NHu">
-                            <color key="tintColor" name="PlanitBlue"/>
+                            <color key="tintColor" name="PlanitPurple"/>
                             <connections>
-                                <segue destination="IPU-jS-NxH" kind="unwind" unwindAction="unwindFromCreateEventViewControllerWith:" id="x1k-JD-Cvb"/>
+                                <action selector="cancel" destination="UO9-XR-LNn" id="y8E-2t-84M"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -264,7 +266,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="omc-G3-CWX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="IPU-jS-NxH" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="Ec1-or-k6m">
                     <connections>
                         <action selector="handleTapGestureRecognizer:" destination="UO9-XR-LNn" id="r5J-qQ-jP7"/>
@@ -322,7 +323,7 @@
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Cz-Fs-T9q" customClass="InvitationTextField">
                                                                 <rect key="frame" x="0.0" y="0.0" width="315" height="18"/>
-                                                                <color key="textColor" name="PlanitBlue"/>
+                                                                <color key="textColor" name="PlanitPurple"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="go" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                                                 <connections>
@@ -372,7 +373,7 @@
                                                                 </label>
                                                             </subviews>
                                                         </view>
-                                                        <color key="backgroundColor" name="PlanitBlue"/>
+                                                        <color key="backgroundColor" name="PlanitPurple"/>
                                                         <constraints>
                                                             <constraint firstItem="wER-sa-HWl" firstAttribute="leading" secondItem="7ng-Y0-F79" secondAttribute="leading" constant="8" id="2cb-YN-ZCZ"/>
                                                             <constraint firstItem="wER-sa-HWl" firstAttribute="centerY" secondItem="7ng-Y0-F79" secondAttribute="centerY" id="HAx-Md-czl"/>
@@ -409,12 +410,12 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="createEventWith:" destination="2Mq-xK-Cn0" eventType="touchUpInside" id="BIQ-XF-7ZY"/>
+                                    <action selector="createEventWith:" destination="2Mq-xK-Cn0" eventType="touchUpInside" id="xRU-IN-uJI"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="tintColor" name="PlanitBlue"/>
+                        <color key="tintColor" name="PlanitPurple"/>
                         <constraints>
                             <constraint firstItem="Qv5-58-rUh" firstAttribute="leading" secondItem="Qs1-t5-sz8" secondAttribute="leading" constant="30" id="9k8-uO-xrF"/>
                             <constraint firstItem="Qs1-t5-sz8" firstAttribute="bottom" secondItem="sXu-po-b9j" secondAttribute="bottom" constant="30" id="K1f-4f-DSS"/>
@@ -435,6 +436,7 @@
                         <outlet property="inviteTextField" destination="3Cz-Fs-T9q" id="aUi-du-XNL"/>
                         <outlet property="invitedPeopleCollectionView" destination="mnq-x2-pGY" id="Qdt-2J-7KU"/>
                         <outlet property="publicPrivateSegmentedControl" destination="dBB-K4-EqR" id="UYd-M0-VSi"/>
+                        <segue destination="awM-U1-hrn" kind="presentation" identifier="logIn" id="cJE-K4-zvi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TDO-eg-NJE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -583,6 +585,9 @@
                                                         <integer key="value" value="1"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="authorize" destination="73o-dh-FDE" eventType="touchUpInside" id="qRK-TV-lOL"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g8Z-rn-u4u">
                                                 <rect key="frame" x="0.0" y="63" width="287" height="32"/>
@@ -599,7 +604,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" name="PlanitBlue"/>
+                        <color key="backgroundColor" name="PlanitPurple"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Oau-68-G2t" firstAttribute="centerY" secondItem="JEw-QR-jei" secondAttribute="centerY" id="0bt-bi-ZTr"/>
@@ -615,7 +620,7 @@
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="tt3-8F-BDu">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="VgG-WX-Ld7" kind="unwind" unwindAction="unwindFromAuthorizationViewControllerWith:" id="DyE-hp-p04"/>
+                                <action selector="cancel" destination="73o-dh-FDE" id="YQM-qK-P89"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -631,7 +636,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enh-HI-FrE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="VgG-WX-Ld7" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="j9Z-uL-lVo">
                     <connections>
                         <action selector="handleTapGestureRecognizer:" destination="73o-dh-FDE" id="s4Z-3M-fxN"/>
@@ -639,6 +643,318 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1046" y="-152"/>
+        </scene>
+        <!--Times View Controller-->
+        <scene sceneID="t4f-it-VfO">
+            <objects>
+                <collectionViewController id="lkQ-U1-Fwi" customClass="TimesViewController" customModule="Planit" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" id="2EW-vP-0GW">
+                        <rect key="frame" x="0.0" y="0.0" width="345" height="508"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HvY-Nf-SCj" customClass="CalendarViewLayout" customModule="Planit" customModuleProvider="target">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="" id="xFU-4t-dTt">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="lkQ-U1-Fwi" id="RQT-ch-8FU"/>
+                            <outlet property="delegate" destination="lkQ-U1-Fwi" id="q1R-KL-sbm"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ndg-O5-2sG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1918" y="2164"/>
+        </scene>
+        <!--Your Events-->
+        <scene sceneID="nD3-hg-bgW">
+            <objects>
+                <tableViewController title="Your Events" id="gfN-zw-Fdk" customClass="EventsViewController" customModule="Planit" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="147" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="6RQ-GY-qGj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" id="DRg-lK-x1Q" customClass="EventsTableViewCell" customModule="Planit" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="147"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DRg-lK-x1Q" id="ihG-A6-dSA">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="147"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tbt-jh-3gz">
+                                            <rect key="frame" x="16" y="15" width="343" height="117"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="fd4-R4-o2J">
+                                                    <rect key="frame" x="15" y="15" width="254" height="56"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Awesome Event" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1xO-9k-rJt">
+                                                            <rect key="frame" x="0.0" y="0.0" width="254" height="33.666666666666664"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By Caroline Moore" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPV-d8-KN5">
+                                                            <rect key="frame" x="0.0" y="35.666666666666671" width="140.33333333333334" height="20.333333333333329"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="znf-cj-z5V">
+                                                    <rect key="frame" x="14.999999999999993" y="81.666666666666671" width="110.33333333333331" height="20.333333333333329"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="gup-Gw-0x2">
+                                                            <rect key="frame" x="0.0" y="0.0" width="43.666666666666664" height="20.333333333333332"/>
+                                                            <subviews>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="People" translatesAutoresizingMaskIntoConstraints="NO" id="fe3-Ix-RQX">
+                                                                    <rect key="frame" x="0.0" y="1.6666666666666572" width="25" height="17"/>
+                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                                                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x9c-Fh-Lwy">
+                                                                    <rect key="frame" x="33" y="0.0" width="10.666666666666664" height="20.333333333333332"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="To4-YA-SUv">
+                                                            <rect key="frame" x="68.666666666666671" y="0.0" width="41.666666666666671" height="20.333333333333332"/>
+                                                            <subviews>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check" translatesAutoresizingMaskIntoConstraints="NO" id="9eA-7A-M2W">
+                                                                    <rect key="frame" x="0.0" y="2.3333333333333286" width="23" height="16"/>
+                                                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                                                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o4G-Tb-6HE">
+                                                                    <rect key="frame" x="30.999999999999989" y="0.0" width="10.666666666666668" height="20.333333333333332"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                </stackView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Lock" translatesAutoresizingMaskIntoConstraints="NO" id="yL2-4e-ObJ">
+                                                    <rect key="frame" x="309" y="21" width="19" height="22"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="znf-cj-z5V" firstAttribute="leading" secondItem="tbt-jh-3gz" secondAttribute="leading" constant="15" id="35m-2t-KrO"/>
+                                                <constraint firstItem="yL2-4e-ObJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1xO-9k-rJt" secondAttribute="trailing" constant="15" id="3ce-Nt-juO"/>
+                                                <constraint firstAttribute="trailing" secondItem="yL2-4e-ObJ" secondAttribute="trailing" constant="15" id="G9p-Yw-1Ha"/>
+                                                <constraint firstItem="fd4-R4-o2J" firstAttribute="top" secondItem="tbt-jh-3gz" secondAttribute="top" constant="15" id="YxL-JA-Wtr"/>
+                                                <constraint firstItem="yL2-4e-ObJ" firstAttribute="centerY" secondItem="1xO-9k-rJt" secondAttribute="centerY" id="bb2-Hh-QHO"/>
+                                                <constraint firstAttribute="bottom" secondItem="znf-cj-z5V" secondAttribute="bottom" constant="15" id="p2D-Gj-v1J"/>
+                                                <constraint firstItem="fd4-R4-o2J" firstAttribute="leading" secondItem="tbt-jh-3gz" secondAttribute="leading" constant="15" id="y1M-kb-ON7"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="tbt-jh-3gz" firstAttribute="leading" secondItem="ihG-A6-dSA" secondAttribute="leadingMargin" id="32R-UE-4LY"/>
+                                        <constraint firstItem="tbt-jh-3gz" firstAttribute="trailing" secondItem="ihG-A6-dSA" secondAttribute="trailingMargin" id="Lo7-Yy-dPF"/>
+                                        <constraint firstAttribute="bottom" secondItem="tbt-jh-3gz" secondAttribute="bottom" constant="15" id="bo3-5c-Qo7"/>
+                                        <constraint firstItem="tbt-jh-3gz" firstAttribute="top" secondItem="ihG-A6-dSA" secondAttribute="top" constant="15" id="su8-4T-s1R"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="creatorLabel" destination="HPV-d8-KN5" id="fSN-5h-FCo"/>
+                                    <outlet property="eventNameLabel" destination="1xO-9k-rJt" id="03N-Ji-jCe"/>
+                                    <outlet property="invitedUsersCountLabel" destination="x9c-Fh-Lwy" id="sbp-ez-LLi"/>
+                                    <outlet property="isPrivateImageView" destination="yL2-4e-ObJ" id="osS-RT-hFI"/>
+                                    <outlet property="joinedUsersCountLabel" destination="o4G-Tb-6HE" id="Jce-zb-VVx"/>
+                                    <outlet property="joinedUsersStackView" destination="To4-YA-SUv" id="KCE-Tf-5MQ"/>
+                                    <outlet property="roundedBackgroundView" destination="tbt-jh-3gz" id="HRE-zz-djq"/>
+                                    <segue destination="hJc-HO-2W0" kind="show" identifier="event" id="1sL-jh-UaM"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gfN-zw-Fdk" id="ZeP-Ef-b9L"/>
+                            <outlet property="delegate" destination="gfN-zw-Fdk" id="zkL-Pk-t5B"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Your Events" id="eVX-hU-PvV">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="Jhc-cw-HFK">
+                            <color key="tintColor" red="0.99101024866104126" green="0.2725127637386322" blue="0.0051303170621395111" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="logOutWith:" destination="gfN-zw-Fdk" id="XDf-a3-hyL"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="i4f-SV-Vuc">
+                            <connections>
+                                <segue destination="zyg-nm-W2h" kind="presentation" identifier="newEvent" id="dx1-g2-v0Y"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="eventsFilterSegmentedControl" destination="6B3-9p-gsu" id="VFe-cQ-OHc"/>
+                        <outlet property="eventsFilterSegmentedControlContainerView" destination="5He-8u-GXY" id="D5l-bt-SpD"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CsV-gQ-ov8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="5He-8u-GXY">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6B3-9p-gsu">
+                            <rect key="frame" x="16" y="16" width="343" height="30"/>
+                            <segments>
+                                <segment title="Created"/>
+                                <segment title="Joined"/>
+                                <segment title="Invited"/>
+                            </segments>
+                            <connections>
+                                <action selector="changeEventsFilterWith:" destination="gfN-zw-Fdk" eventType="valueChanged" id="MVu-7J-JAM"/>
+                            </connections>
+                        </segmentedControl>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="6B3-9p-gsu" firstAttribute="leading" secondItem="57o-aK-vBl" secondAttribute="leading" constant="16" id="5yT-re-TkF"/>
+                        <constraint firstItem="57o-aK-vBl" firstAttribute="trailing" secondItem="6B3-9p-gsu" secondAttribute="trailing" constant="16" id="KjG-f4-DOW"/>
+                        <constraint firstItem="6B3-9p-gsu" firstAttribute="top" secondItem="5He-8u-GXY" secondAttribute="top" constant="16" id="naE-HT-O6z"/>
+                        <constraint firstAttribute="bottom" secondItem="6B3-9p-gsu" secondAttribute="bottom" constant="15" id="tOt-op-rhG"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="57o-aK-vBl"/>
+                </view>
+            </objects>
+            <point key="canvasLocation" x="1046" y="1552"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Up5-JY-Zcj">
+            <objects>
+                <navigationController id="pzF-wK-DJA" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="zNR-vI-qla">
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="gfN-zw-Fdk" kind="relationship" relationship="rootViewController" id="4i7-cu-RlZ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mu1-j6-1H3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="1553"/>
+        </scene>
+        <!--Event-->
+        <scene sceneID="4Yu-Iq-gkj">
+            <objects>
+                <viewController id="hJc-HO-2W0" customClass="EventViewController" customModule="Planit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VHg-hB-5Dq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EOQ-76-czt">
+                                <rect key="frame" x="15" y="184" width="345" height="508"/>
+                                <connections>
+                                    <segue destination="lkQ-U1-Fwi" kind="embed" identifier="embedTimesViewController" id="wft-75-CPC"/>
+                                </connections>
+                            </containerView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yyl-q3-A3Q">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="P3A-wG-xz0">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="gEM-UU-7jb">
+                                <rect key="frame" x="30" y="148" width="315" height="29"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                                <connections>
+                                    <action selector="updateWeekdayWith:" destination="hJc-HO-2W0" eventType="valueChanged" id="B7H-2v-Fdw"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cjH-J6-0dr" customClass="Button" customModule="Planit" customModuleProvider="target">
+                                <rect key="frame" x="30" y="722" width="315" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Pfh-zy-0T2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Join Event">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="theme">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="pressedConfirmButtonWith:" destination="hJc-HO-2W0" eventType="touchUpInside" id="soH-xL-RMb"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" name="PlanitPurple"/>
+                        <constraints>
+                            <constraint firstItem="EOQ-76-czt" firstAttribute="leading" secondItem="i1p-4g-pkN" secondAttribute="leading" constant="15" id="4nB-oB-Cey"/>
+                            <constraint firstItem="yyl-q3-A3Q" firstAttribute="top" secondItem="VHg-hB-5Dq" secondAttribute="top" id="7fD-10-2Zn"/>
+                            <constraint firstItem="i1p-4g-pkN" firstAttribute="trailing" secondItem="EOQ-76-czt" secondAttribute="trailing" constant="15" id="AGa-eG-ZG4"/>
+                            <constraint firstItem="i1p-4g-pkN" firstAttribute="trailing" secondItem="gEM-UU-7jb" secondAttribute="trailing" constant="30" id="Pxc-57-Z8x"/>
+                            <constraint firstItem="gEM-UU-7jb" firstAttribute="top" secondItem="i1p-4g-pkN" secondAttribute="top" constant="8" id="S90-wh-BZC"/>
+                            <constraint firstAttribute="trailing" secondItem="yyl-q3-A3Q" secondAttribute="trailing" id="SWv-y0-Szr"/>
+                            <constraint firstItem="cjH-J6-0dr" firstAttribute="leading" secondItem="i1p-4g-pkN" secondAttribute="leading" constant="30" id="Y4L-ic-YkD"/>
+                            <constraint firstItem="i1p-4g-pkN" firstAttribute="trailing" secondItem="cjH-J6-0dr" secondAttribute="trailing" constant="30" id="Zhq-jA-Uho"/>
+                            <constraint firstAttribute="bottom" secondItem="yyl-q3-A3Q" secondAttribute="bottom" id="c6N-Ra-fcX"/>
+                            <constraint firstItem="yyl-q3-A3Q" firstAttribute="leading" secondItem="VHg-hB-5Dq" secondAttribute="leading" id="ete-W4-xCV"/>
+                            <constraint firstItem="cjH-J6-0dr" firstAttribute="top" secondItem="EOQ-76-czt" secondAttribute="bottom" constant="30" id="j33-g7-aBc"/>
+                            <constraint firstItem="EOQ-76-czt" firstAttribute="top" secondItem="gEM-UU-7jb" secondAttribute="bottom" constant="8" id="m5L-f2-r7Q"/>
+                            <constraint firstItem="gEM-UU-7jb" firstAttribute="leading" secondItem="i1p-4g-pkN" secondAttribute="leading" constant="30" id="nMf-hf-xu5"/>
+                            <constraint firstItem="i1p-4g-pkN" firstAttribute="bottom" secondItem="cjH-J6-0dr" secondAttribute="bottom" constant="8" id="uzF-gI-lPK"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="i1p-4g-pkN"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Event" id="xep-cN-SQY"/>
+                    <connections>
+                        <outlet property="blurView" destination="yyl-q3-A3Q" id="BdQ-NY-9YY"/>
+                        <outlet property="confirmButton" destination="cjH-J6-0dr" id="FWP-h0-PPi"/>
+                        <outlet property="importCalendarButton" destination="sNY-fw-rXG" id="tyy-nx-zeg"/>
+                        <outlet property="leaveEventButton" destination="9vg-sQ-rqq" id="YRT-cw-Uwl"/>
+                        <outlet property="weekdaySegmentedControl" destination="gEM-UU-7jb" id="SM8-Qi-hfL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2iM-qM-iI6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem title="Import Calendar" id="sNY-fw-rXG">
+                    <connections>
+                        <action selector="importCalendarWith:" destination="hJc-HO-2W0" id="KWA-H4-LwL"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem title="Leave Event" id="9vg-sQ-rqq">
+                    <color key="tintColor" red="0.99101024866104126" green="0.2725127637386322" blue="0.0051303170621395111" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <action selector="leaveEventWith:" destination="hJc-HO-2W0" id="u3g-xN-O60"/>
+                    </connections>
+                </barButtonItem>
+            </objects>
+            <point key="canvasLocation" x="1918" y="1553"/>
         </scene>
         <!--New Event-->
         <scene sceneID="V3A-Xv-PXW">
@@ -670,7 +986,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="jIS-yr-KKA"/>
@@ -683,7 +999,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="3mj-yj-GU3"/>
@@ -696,7 +1012,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="u50-D1-eZT"/>
@@ -709,7 +1025,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="eUx-5K-gA2"/>
@@ -722,7 +1038,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="USI-DB-Oj0"/>
@@ -735,7 +1051,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="bI8-wB-mKn"/>
@@ -748,7 +1064,7 @@
                                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         </state>
                                                         <state key="selected">
-                                                            <color key="titleColor" name="PlanitBlue"/>
+                                                            <color key="titleColor" name="PlanitPurple"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="pressedDayButton:" destination="2tT-By-g0e" eventType="touchUpInside" id="gKM-x9-1qj"/>
@@ -852,7 +1168,7 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="tintColor" name="PlanitBlue"/>
+                        <color key="tintColor" name="PlanitPurple"/>
                         <constraints>
                             <constraint firstItem="rug-n1-nA4" firstAttribute="top" secondItem="a0x-Kp-0gG" secondAttribute="top" constant="30" id="Ck1-zp-zzw"/>
                             <constraint firstItem="a0x-Kp-0gG" firstAttribute="bottom" secondItem="6eK-ok-Pz3" secondAttribute="bottom" constant="20" id="DQt-Vp-QYh"/>
@@ -914,7 +1230,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0UB-B9-NwG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2780" y="1158"/>
+            <point key="canvasLocation" x="2780" y="1171"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="fxM-9e-5HK">
@@ -924,7 +1240,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" shadowImage="WhiteLine" largeTitles="YES" id="TF1-ym-N9X">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" name="PlanitBlue"/>
+                        <color key="barTintColor" name="PlanitPurple"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -949,7 +1265,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="KOT-E6-V3m">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="PlanitBlue"/>
+                        <color key="tintColor" name="PlanitPurple"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -964,13 +1280,17 @@
     <resources>
         <image name="DeleteIcon" width="10" height="10"/>
         <image name="ForwardArrow" width="13" height="22"/>
+        <image name="Lock" width="19" height="22"/>
         <image name="Logo" width="260" height="260"/>
+        <image name="People" width="25" height="17"/>
         <image name="WhiteLine" width="43" height="1"/>
-        <namedColor name="PlanitBlue">
+        <image name="check" width="23" height="16"/>
+        <namedColor name="PlanitPurple">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="zZ4-U2-frQ"/>
+        <segue reference="dx1-g2-v0Y"/>
+        <segue reference="cJE-K4-zvi"/>
     </inferredMetricsTieBreakers>
 </document>

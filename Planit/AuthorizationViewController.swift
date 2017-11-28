@@ -89,9 +89,18 @@ private extension AuthorizationViewController
         self.authorizeButton.isEnabled = enabled
     }
     
-    func authorize()
+    @IBAction func authorize()
     {
         print("Authenticating user...")
+        
+        User.current = User(name: "Caroline", identifier: 3)
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func cancel()
+    {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

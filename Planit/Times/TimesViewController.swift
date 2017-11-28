@@ -10,9 +10,9 @@ import UIKit
 
 class TimesViewController: UICollectionViewController
 {
-    var availabilityIntervals = [DateInterval]()
+    var availabilities = [Availability]()
     
-    var weekday: DateComponents.Weekday! {
+    var weekday: Calendar.Weekday! {
         didSet {
             guard let collectionView = self.collectionView else { return }
             
@@ -23,7 +23,11 @@ class TimesViewController: UICollectionViewController
         }
     }
     
-    var user: User?
+    var colors: [UIColor] = UIColor.contentColors
+    
+    private var user: User {
+        return User.current ?? User.temporary
+    }
     
     private var updatingIndexPath: IndexPath?
     
@@ -34,7 +38,7 @@ class TimesViewController: UICollectionViewController
         let calendar = Calendar(identifier: .gregorian)
         
         let startDate = calendar.date(from: DateComponents(hour: 8))!
-        let endDate = calendar.date(from: DateComponents(hour: 24))!
+        let endDate = calendar.date(from: DateComponents(hour: 23))!
 
         let collectionViewLayout = self.collectionViewLayout as! CalendarViewLayout
         collectionViewLayout.dataSource = self
@@ -68,17 +72,28 @@ private extension TimesViewController
     {
         guard let collectionView = self.collectionView, let collectionViewLayout = self.collectionViewLayout as? CalendarViewLayout else { return }
         
-        guard collectionView.indexPathForItem(at: gestureRecognizer.location(in: collectionView)) == nil else { return }
+        let location = gestureRecognizer.location(in: collectionView)
+        
+        if let indexPath = self.collectionView?.indexPathForItem(at: location)
+        {
+            let availability = self.availabilities[indexPath.item]
+            
+            guard availability.user != self.user else { return }
+        }
+        
+        let user = self.user
         
         let calendar = Calendar(identifier: .gregorian)
         
         let intervalStartHour = calendar.component(.hour, from: collectionViewLayout.visibleDateInterval.start)
-        let hourOffset = Int((gestureRecognizer.location(in: collectionView).y - collectionViewLayout.rowHeight / 2.0) / collectionViewLayout.rowHeight)
+        let hourOffset = Int((location.y - collectionViewLayout.rowHeight / 2.0) / collectionViewLayout.rowHeight)
         
         let date = DateComponents(calendar: calendar, hour: intervalStartHour + hourOffset, weekday: self.weekday.rawValue, weekdayOrdinal: 1).date!
         
         let interval = DateInterval(start: date, duration: 1 * 60 * 60)
-        self.availabilityIntervals.append(interval)
+        
+        let availability = Availability(user: user, interval: interval)
+        self.availabilities.append(availability)
         
         collectionView.reloadData()
     }
@@ -102,41 +117,46 @@ private extension TimesViewController
             
             guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
             
+            if let existingIndexPath = collectionView.indexPathForItem(at: location), existingIndexPath != indexPath
+            {
+                return
+            }
+            
             let translation = gestureRecognizer.translation(in: collectionView).y
             
             let hourOffset = translation / collectionViewLayout.rowHeight
             
-            var interval = self.availabilityIntervals[indexPath.item]
+            var availability = self.availabilities[indexPath.item]
             
             let timeIntervalOffset = TimeInterval(hourOffset * 60 * 60)
             
             if abs(location.y - frame.midY) < abs(location.y - frame.maxY)
             {
-                if interval.duration > 1 * 60 * 60 || timeIntervalOffset < 0
+                if availability.interval.duration > 1 * 60 * 60 || timeIntervalOffset < 0
                 {
-                    interval = DateInterval(start: interval.start.addingTimeInterval(timeIntervalOffset), end: interval.end)
+                    availability.interval = DateInterval(start: availability.interval.start.addingTimeInterval(timeIntervalOffset), end: availability.interval.end)
                 }
             }
             else
             {
-                if interval.duration > 1 * 60 * 60 || timeIntervalOffset > 0
+                if availability.interval.duration > 1 * 60 * 60 || timeIntervalOffset > 0
                 {
-                    interval = DateInterval(start: interval.start, duration: interval.duration + timeIntervalOffset)
+                    availability.interval = DateInterval(start: availability.interval.start, duration: availability.interval.duration + timeIntervalOffset)
                 }
             }
             
-            self.availabilityIntervals[indexPath.item] = interval
+            self.availabilities[indexPath.item] = availability
             
         default:
             // Round interval to nearest hour
             guard let indexPath = self.updatingIndexPath else { return }
             
-            var interval = self.availabilityIntervals[indexPath.item]
+            var availability = self.availabilities[indexPath.item]
             
             let calendar = Calendar(identifier: .gregorian)
             
-            var startComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .weekday, .weekdayOrdinal], from: interval.start)
-            var endComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .weekday, .weekdayOrdinal], from: interval.end)
+            var startComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .weekday, .weekdayOrdinal], from: availability.interval.start)
+            var endComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .weekday, .weekdayOrdinal], from: availability.interval.end)
             
             if startComponents.minute! >= 30
             {
@@ -150,10 +170,10 @@ private extension TimesViewController
             }
             endComponents.minute = 0
             
-            interval.start = calendar.date(from: startComponents)!
-            interval.end = calendar.date(from: endComponents)!
+            availability.interval.start = calendar.date(from: startComponents)!
+            availability.interval.end = calendar.date(from: endComponents)!
             
-            self.availabilityIntervals[indexPath.item] = interval
+            self.availabilities[indexPath.item] = availability
             
             self.updatingIndexPath = nil
         }
@@ -174,6 +194,10 @@ extension TimesViewController: UIGestureRecognizerDelegate
         
         guard let indexPath = self.collectionView?.indexPathForItem(at: location) else { return false }
         
+        let availability = self.availabilities[indexPath.item]
+        
+        guard availability.user == self.user else { return false }
+        
         guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return false }
         
         let threshold: CGFloat = 22.0
@@ -192,23 +216,40 @@ extension TimesViewController
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return self.availabilityIntervals.count
+        return self.availabilities.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
+        let availability = self.availabilities[indexPath.item]
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalendarViewCell
-        cell.tintColor = UIColor.planitBlue
-        cell.textLabel.text = self.user?.name ?? "Event"
+        cell.textLabel.text = availability.user.name
+        cell.tintColor = self.color(for: availability.user)
+        
         return cell
+    }
+    
+    private func color(for user: User) -> UIColor
+    {
+        let users = Set(self.availabilities.lazy.map { $0.user }.filter { $0 != self.user }).sorted { $0.name < $1.name }
+        
+        guard let index = users.index(of: user) else {
+            return (user == self.user) ? .planitPurple : .darkGray
+        }
+        
+        let updatedIndex = index % self.colors.count
+        
+        let color = self.colors[updatedIndex]
+        return color
     }
 }
 
 extension TimesViewController: CalendarViewLayoutDataSource
 {
-    func calendarViewLayout(_ calendarViewLayout: CalendarViewLayout, dateIntervalForItemAt indexPath: IndexPath) -> DateInterval
+    func calendarViewLayout(_ calendarViewLayout: CalendarViewLayout, availabilityForItemAt indexPath: IndexPath) -> Availability
     {
-        let interval = self.availabilityIntervals[indexPath.row]
-        return interval
+        let availability = self.availabilities[indexPath.row]
+        return availability
     }
 }

@@ -89,7 +89,7 @@ class Button: UIButton
         
         switch theme
         {
-        case .dark: self.backgroundView.backgroundColor = .planitBlue
+        case .dark: self.backgroundView.backgroundColor = .planitPurple
             self.layer.shadowOpacity = 0.14
         case .light: self.backgroundView.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
             self.layer.shadowOpacity = 0.30

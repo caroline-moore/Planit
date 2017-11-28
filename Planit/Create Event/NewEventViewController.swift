@@ -31,7 +31,7 @@ extension NewEventViewController
     {
         guard let timesViewController = segue.destination as? NewEventTimesViewController else { return }
         
-        let event = Event()
+        var event = Event()
         event.name = self.nameTextField.text ?? ""
         event.duration = self.durationPicker.countDownDuration
         event.isRecurring = self.isRecurringSwitch.isOn
@@ -59,6 +59,11 @@ private extension NewEventViewController
     func `continue`()
     {
         self.performSegue(withIdentifier: "continue", sender: nil)
+    }
+    
+    @IBAction func cancel()
+    {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

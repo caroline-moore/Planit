@@ -17,10 +17,21 @@ class LaunchViewController: UIViewController
         return .lightContent
     }
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         
         self.planitLabel.attributedText = NSAttributedString(string: "planit", attributes: [NSAttributedStringKey.kern: 1.25])
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        
+        if User.current != nil
+        {
+            self.performSegue(withIdentifier: "showEvents", sender: nil)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,14 +54,6 @@ extension LaunchViewController
         case "signUp": authorizationViewController.authorizationType = .signUp
         default: break
         }
-    }
-    
-    @IBAction func unwindFromAuthorizationViewController(with seque: UIStoryboardSegue)
-    {
-    }
-    
-    @IBAction func unwindFromCreateEventViewController(with seque: UIStoryboardSegue)
-    {
     }
 }
 

@@ -63,7 +63,7 @@ class PlanitAPI
     
     func receiveData() -> Data?
     {
-        Thread.sleep(forTimeInterval: 0.5)
+        Thread.sleep(forTimeInterval: 1.0)
         
         guard let reversedDataLengthBytes = client.read(4) else { return nil }
         let dataLengthBytes = Array(reversedDataLengthBytes.reversed())
@@ -126,9 +126,7 @@ class PlanitAPI
                     guard let jsonData = self?.receiveData() else { continue }
                     
                     let decoder = JSONDecoder()
-                    let json = try decoder.decode(EventJSON.self, from: jsonData)
-                    
-                    let updatedEvent = json.event
+                    let updatedEvent = try decoder.decode(Event.self, from: jsonData)
                     
                     NotificationCenter.default.post(name: .updatedEvent, object: updatedEvent)
                 }
@@ -145,7 +143,7 @@ class PlanitAPI
         self.connected = false
     }
     
-    func getEvents(ofType: String, forUser: User, completion: @escaping (Array<Event>?) -> Void)
+    func getEvents(for user: User, completion: @escaping (([Event], [Event], [Event])?) -> Void)
     {
         if (connected == false)
         {
@@ -157,39 +155,15 @@ class PlanitAPI
             
             if !self.useDummyData
             {
-                let (created, joined, invited) = self.generateEvents()
-                
-                switch ofType
-                {
-                case "created":
-                    completion(created)
-                case "joined":
-                    completion(joined)
-                case "invited":
-                    completion(invited)
-                default:
-                    completion(nil)
-                    return
-                }
+                let events = self.generateEvents()
+                completion(events)
                 
                 return
             }
             
             var data = UserIdJSON()
-            data.userID = forUser.identifier
-            
-            switch ofType
-            {
-            case "created":
-                data.type = "getcreatedevents"
-            case "joined":
-                data.type = "getjoinedevents"
-            case "invited":
-                data.type = "getinvitedevents"
-            default:
-                completion(nil)
-                return
-            }
+            data.userID = user.identifier
+            data.type = "getevents"
             
             do
             {
@@ -201,11 +175,10 @@ class PlanitAPI
                     guard let jsonData = self.receiveData() else { completion(nil); return }
                     
                     let decoder = JSONDecoder()
-                    let json = try decoder.decode(EventListJSON.self, from: jsonData)
+                    let json = try decoder.decode(UserEventsJSON.self, from: jsonData)
                     
-                    let eventList = json.events
-                    
-                    completion(eventList)
+                    let events = (json.createdEvents, json.joinedEvents, json.invitedEvents)
+                    completion(events)
                     
                 case .failure(let error):
                     print(error)
@@ -298,13 +271,13 @@ class PlanitAPI
                 var data = EventJSON()
                 data.type = "updateevent"
                 data.event = event
-                data.user = User.current
                 
                 let result = try self.sendData(data: data)
                 
                 switch result
                 {
                 case .success:
+                    
                     guard let data = self.receiveData() else { completion(false); return }
                     
                     if let response = String(data: data, encoding: .utf8)

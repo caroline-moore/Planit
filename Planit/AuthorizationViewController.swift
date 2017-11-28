@@ -148,35 +148,17 @@ private extension AuthorizationViewController
             }
         }
         
-        PlanitAPI.shared.getEvents(ofType: "created", forUser: User.current!) { (events) in
+        PlanitAPI.shared.getEvents(for: User.current!) { (events) in
             if let events = events
             {
-                User.current?.createdEvents = events
+                let (createdEvents, joinedEvents, invitedEvents) = events
                 
-                PlanitAPI.shared.getEvents(ofType: "joined", forUser: User.current!) { (events) in
-                    if let events = events
-                    {
-                        User.current?.joinedEvents = events
-                        
-                        PlanitAPI.shared.getEvents(ofType: "invited", forUser: User.current!) { (events) in
-                            if let events = events
-                            {
-                                User.current?.invitedEvents = events
-                                
-                                DispatchQueue.main.async {
-                                    self.dismiss(animated: true, completion: nil)
-                                }
-                            }
-                            else
-                            {
-                                presentErrorAlert()
-                            }
-                        }
-                    }
-                    else
-                    {
-                        presentErrorAlert()
-                    }
+                User.current?.createdEvents = createdEvents
+                User.current?.joinedEvents = joinedEvents
+                User.current?.invitedEvents = invitedEvents
+                
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
             else

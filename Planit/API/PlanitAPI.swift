@@ -90,9 +90,15 @@ class PlanitAPI
     func sendData<T: Codable>(data: T) throws -> Result
     {
         let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
         let eventData = try encoder.encode(data)
         
+        let temp = String(data: eventData, encoding: .utf8)!
+        print(temp)
+        
         var dataLength = UInt32(eventData.count)
+        
         dataLength = CFSwapInt32HostToBig(dataLength)
         
         let dataLengthData = Data(bytes: &dataLength, count: MemoryLayout.size(ofValue: dataLength))
@@ -100,8 +106,27 @@ class PlanitAPI
         switch lengthResult
         {
         case .success:
-            let result = client.send(data: eventData)
-            return result
+            
+            var remaining = eventData.count
+            var index = 0
+            
+            while remaining > 0
+            {
+                let length = min(512, remaining)
+                
+                let data = eventData[index..<index + length]
+                let result = client.send(data: data)
+                if case let .failure(error) = result
+                {
+                    print(error)
+                    return result
+                }
+                
+                remaining -= length
+                index += length
+            }
+            
+            return .success
             
         case .failure:
             return lengthResult
@@ -153,7 +178,7 @@ class PlanitAPI
         
         self.networkingQueue.async {
             
-            if !self.useDummyData
+            if self.useDummyData
             {
                 let events = self.generateEvents()
                 completion(events)
@@ -282,7 +307,7 @@ class PlanitAPI
                     
                     if let response = String(data: data, encoding: .utf8)
                     {
-                        if (response == "true")
+                        if (response == "success")
                         {
                             completion(true)
                         }

@@ -210,11 +210,18 @@ private extension EventViewController
     
     @objc func didUpdateEvent(with notification: Notification)
     {
-        guard let event = notification.object as? Event else { return }
+        guard let event = notification.object as? Event, event == self.event else { return }
         
         self.event = event
         
-        self.updateEvent()
+        DispatchQueue.main.async {
+            self.updateEvent()
+            
+            self.update()
+            
+            self.timesViewController.availabilities = self.event.availabilities.sorted()
+            self.timesViewController.collectionView?.reloadData()
+        }
     }
 }
 
